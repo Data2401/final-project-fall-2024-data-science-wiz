@@ -17,5 +17,7 @@ knitr::opts_chunk$set(echo = TRUE)
 #read.csv("world_air_quality.csv")
 ##wont read file because it says its too big
 read.csv("Air_Quality.csv")
+read.csv("")
+read.csv()
 
 ```
