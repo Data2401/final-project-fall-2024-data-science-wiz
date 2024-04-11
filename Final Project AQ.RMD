@@ -13,6 +13,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 #Data 
 ```{r}
+library(tidyverese)
 #read.csv("openaq.csv")
 #read.csv("world_air_quality.csv")
 ##wont read file because it says its too big
