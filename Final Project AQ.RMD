@@ -11,12 +11,14 @@ knitr::opts_chunk$set(echo = TRUE)
 
 #intro
 
+What’s interesting about this data is that we can evaluate the relationship between air pollution, and death rates. Not only that but we can find out the largest factor of air pollution and why the air is of such bad quality in the Middle East. The reason for choosing this data and topic is because it sparks an interest in the health of our planet, and ultimately can help find a solution to the problem.
+
 #Data 
 ```{r}
 library(tidyverse)
 data <- read_csv2("openaq.csv")
 WAQ_data <- read.csv2("world_air_quality.csv")
-air <- read.csv("Air_Quality.csv")
+
 
 ```
 
@@ -29,3 +31,4 @@ air <- read.csv("Air_Quality.csv")
 2. Were there any changes in factors or levels of pollution before and after Covid-19?
 3. Is there a noticeable difference in walkable citites in contrast to non-walkable cities?
 4. What is the death rate caused by air pollution in each continent/country?
+5. Why does the Middle East have the worst air quality 
