@@ -18,8 +18,8 @@ data <- read_csv2("openaq.csv")
 WAQ_data <- read.csv2("world_air_quality.csv")
 air <- read.csv("Air_Quality.csv")
 
-
 ```
+
 
 
 #Questions 

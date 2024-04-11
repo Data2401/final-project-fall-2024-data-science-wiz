@@ -359,16 +359,44 @@ display: none;
 
 <p>#intro</p>
 <p>#Data</p>
-<pre class="r"><code>#read.csv(&quot;openaq.csv&quot;)
-#read.csv(&quot;world_air_quality.csv&quot;)
-##wont read file because it says its too big
-#read.csv(&quot;Air_Quality.csv&quot;)</code></pre>
-<p>#Questions 1. what are the factors of air pollution? - how do these
-factors vary through out each continent 2. Were there any changes in
-factors or levels of pollution before and after Covid-19? 3. Is there a
-noticeable difference in walkable citites in contrast to non-walkable
-cities? 4. What is the death rate caused by air pollution in each
-continent/country?</p>
+<pre class="r"><code>library(tidyverse)</code></pre>
+<pre><code>## Warning: package &#39;tidyverse&#39; was built under R version 4.3.3</code></pre>
+<pre><code>## Warning: package &#39;ggplot2&#39; was built under R version 4.3.3</code></pre>
+<pre><code>## ── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
+## ✔ dplyr     1.1.4     ✔ readr     2.1.5
+## ✔ forcats   1.0.0     ✔ stringr   1.5.1
+## ✔ ggplot2   3.5.0     ✔ tibble    3.2.1
+## ✔ lubridate 1.9.3     ✔ tidyr     1.3.1
+## ✔ purrr     1.0.2     
+## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+## ✖ dplyr::filter() masks stats::filter()
+## ✖ dplyr::lag()    masks stats::lag()
+## ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors</code></pre>
+<pre class="r"><code>data &lt;- read_csv2(&quot;openaq.csv&quot;)</code></pre>
+<pre><code>## ℹ Using &quot;&#39;,&#39;&quot; as decimal and &quot;&#39;.&#39;&quot; as grouping mark. Use `read_delim()` for more control.
+## Rows: 54551 Columns: 10── Column specification ────────────────────────────────────────────────────────
+## Delimiter: &quot;;&quot;
+## chr  (9): Country Code, City, Location, Coordinates, Pollutant, Source Name,...
+## dttm (1): Last Updated
+## ℹ Use `spec()` to retrieve the full column specification for this data.
+## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
+<pre class="r"><code>WAQ_data &lt;- read.csv2(&quot;world_air_quality.csv&quot;)
+air &lt;- read.csv(&quot;Air_Quality.csv&quot;)</code></pre>
+<p>#Questions</p>
+<ol style="list-style-type: decimal">
+<li>what are the factors of air pollution?</li>
+</ol>
+<ul>
+<li>how do these factors vary through out each continent?</li>
+</ul>
+<ol start="2" style="list-style-type: decimal">
+<li>Were there any changes in factors or levels of pollution before and
+after Covid-19?</li>
+<li>Is there a noticeable difference in walkable citites in contrast to
+non-walkable cities?</li>
+<li>What is the death rate caused by air pollution in each
+continent/country?</li>
+</ol>
 
 
 
