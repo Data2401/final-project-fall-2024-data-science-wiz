@@ -29,9 +29,10 @@ GAP <- read.csv("global air pollution dataset.csv")
 
 DR_data <- read.csv("death_rate_airpollution.csv")
 
-#this data set has the amount and types of pollution each country has contributed from 2010-2020                 
+#this data set has the amount and types of pollution each country has contributed from 2010-2020          
 types_pollution <- read.csv("country_level_data_0.csv")
-
+#specifies what causes the emission and what is the main pollutant in the air from 2000-2020 in each country
+T_Emmission <- read.csv("Total Emissions Per Country (2000-2020).csv")
 ```
 
 
