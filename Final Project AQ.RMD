@@ -12,31 +12,34 @@ output:
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-
-# Data 
-
-What’s interesting about this data is that we can evaluate the relationship between air pollution, and death rates. Not only that but we can find out the largest factor of air pollution and why the air is of such bad quality in the Middle East. The reason for choosing this data and topic is because it sparks an interest in the health of our planet, and ultimately can help find a solution to the problem.
-
 ```{r}
 library(tidyverse)
 
-#both data sets contain more than 50k entries with many updates throughout a singular year
-data <- read_csv2("openaq.csv")
-WAQ_data <- read.csv2("world_air_quality.csv") 
-
-#simple data yet specifies the different levels of air quality in each country 
 GAP <- read.csv("global air pollution dataset.csv")
-
 DR_data <- read.csv("death_rate_airpollution.csv")
+T_Emission <- read.csv("Total Emissions Per Country (2000-2020).csv")
+```
+# Data 
 
-#this data set has the amount and types of pollution each country has contributed from 2010-2020          
-types_pollution <- read.csv("country_level_data_0.csv")
-#specifies what causes the emission and what is the main pollutant in the air from 2000-2020 in each country
-T_Emmission <- read.csv("Total Emissions Per Country (2000-2020).csv")
+What’s interesting about this data is that we can evaluate the relationship between air pollution, and death rates. Not only that but we can find out the largest factor of air pollution and why the air is of such bad quality in the Middle East. The reason for choosing this data and topic is because it sparks an interest in the health of our planet, and ultimately can help find a solution to the problem. All the data was collected from kaggle.com. 
+
+
+In this set we can see the country, city, the air quality and information on some pollutants in these countries.
+```{r}
+glimpse(GAP)
+```
+This set shows the death rate caused by Air Pollution in each country from 1990 until 2019
+```{r}
+glimpse(DR_data)
+``` 
+This set shows the sources and types of emission of each country from 2000 to 2020.
+```{r}
+glimpse(T_Emission)
 ```
 
 # Introduction
 
+  As an evolving planet and ever-evolving society, one thing has become a pressing concern and that is our world's air quality. Air pollution has caused detrimental effects reaching all sides of the globe.  In this data set, we take a dive into the intricate relationship of air pollution and the negative toll that it takes upon human health that is measured through deaths. All while asking questions such as the correlation of air-polluting factors and how they vary throughout each continent. Through these data sets we will have a greater understanding of the larger problem at hand  and furthermore shed light on this issue at hand.
 
 
 # Questions 
