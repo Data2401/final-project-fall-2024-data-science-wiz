@@ -2,18 +2,18 @@
 title: "AQ project"
 author: "Claudia Lopez & Vanessa Ortiz"
 date: "2024-04-11"
-output: html_document
+output: 
+  html_document: 
+    highlight: pygments
+    theme: cerulean
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-#intro
 
-
-
-#Data 
+# Data 
 
 What’s interesting about this data is that we can evaluate the relationship between air pollution, and death rates. Not only that but we can find out the largest factor of air pollution and why the air is of such bad quality in the Middle East. The reason for choosing this data and topic is because it sparks an interest in the health of our planet, and ultimately can help find a solution to the problem.
 
@@ -35,9 +35,11 @@ types_pollution <- read.csv("country_level_data_0.csv")
 T_Emmission <- read.csv("Total Emissions Per Country (2000-2020).csv")
 ```
 
+# Introduction
 
 
-#Questions 
+
+# Questions 
 
 1. what are the factors of air pollution?
  - how do these factors vary through out each continent? 
