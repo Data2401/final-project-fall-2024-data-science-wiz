@@ -11,14 +11,26 @@ knitr::opts_chunk$set(echo = TRUE)
 
 #intro
 
-What’s interesting about this data is that we can evaluate the relationship between air pollution, and death rates. Not only that but we can find out the largest factor of air pollution and why the air is of such bad quality in the Middle East. The reason for choosing this data and topic is because it sparks an interest in the health of our planet, and ultimately can help find a solution to the problem.
+
 
 #Data 
+
+What’s interesting about this data is that we can evaluate the relationship between air pollution, and death rates. Not only that but we can find out the largest factor of air pollution and why the air is of such bad quality in the Middle East. The reason for choosing this data and topic is because it sparks an interest in the health of our planet, and ultimately can help find a solution to the problem.
+
 ```{r}
 library(tidyverse)
-data <- read_csv2("openaq.csv")
-WAQ_data <- read.csv2("world_air_quality.csv")
 
+#both data sets contain more than 50k entries with many updates throughout a singular year
+data <- read_csv2("openaq.csv")
+WAQ_data <- read.csv2("world_air_quality.csv") 
+
+#simple data yet specifies the different levels of air quality in each country 
+GAP <- read.csv("global air pollution dataset.csv")
+
+DR_data <- read.csv("death_rate_airpollution.csv")
+
+#this data set has the amount and types of pollution each country has contributed from 2010-2020                 
+types_pollution <- read.csv("country_level_data_0.csv")
 
 ```
 
