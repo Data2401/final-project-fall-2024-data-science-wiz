@@ -50,3 +50,11 @@ glimpse(T_Emission)
 3. Is there a noticeable difference in walkable citites in contrast to non-walkable cities?
 4. What is the death rate caused by air pollution in each continent/country?
 5. Why does the Middle East have the worst air quality 
+
+
+
+```{r}
+
+DR_data %>% filter(Year == 1990) %>% arrange(Deaths.that.are.from.all.causes.attributed.to.air.pollution.per.100.000.people..in.both.sexes.aged.age.standardized)
+
+```
