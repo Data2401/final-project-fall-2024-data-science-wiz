@@ -57,4 +57,7 @@ glimpse(T_Emission)
 
 DR_data %>% filter(Year == 1990) %>% arrange(Deaths.that.are.from.all.causes.attributed.to.air.pollution.per.100.000.people..in.both.sexes.aged.age.standardized)
 
+DR_data %>% filter(Year == 2019) %>% arrange(Deaths.that.are.from.all.causes.attributed.to.air.pollution.per.100.000.people..in.both.sexes.aged.age.standardized)
+
+DR_data %>% filter(Entity == "Iceland") %>% arrange(Deaths.that.are.from.all.causes.attributed.to.air.pollution.per.100.000.people..in.both.sexes.aged.age.standardized)
 ```
