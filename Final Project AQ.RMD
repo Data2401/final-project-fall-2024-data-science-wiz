@@ -12,7 +12,7 @@ output:
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-```{r}
+```{r message=FALSE}
 #Load tidyverse to neatly present data
 #Load dplyr to manipulate data  
 #Load ggplot2 for presenting the data visually
