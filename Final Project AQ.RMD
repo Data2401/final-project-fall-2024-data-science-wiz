@@ -15,9 +15,15 @@ knitr::opts_chunk$set(echo = TRUE)
 ```{r}
 library(tidyverse) 
 library(dplyr)
+library(ggplot2)
+library(countrycode)
+```
+
+```{r}
 GAP <- read.csv("global air pollution dataset.csv")
 DR_data <- read.csv("death_rate_airpollution.csv")
 T_Emission <- read.csv("Total Emissions Per Country (2000-2020).csv")
+
 ```
 # Data 
 
@@ -66,8 +72,11 @@ DR_data %>% filter(Entity == "Iceland") %>% arrange(death_rate)
 
 
 ```{r}
-#T_Emmission %>% group_by(Item) %>% summarise(ncount = n())
+T_Emmission %>% group_by(Item) %>% summarise(ncount = n())
 
-  colnames(DR_data) <- c(country, code, year, death_rate)
+
+T_Emmission %>% group_by(Element) %>% summarise(ncount = n())
+
+
 
 ```
