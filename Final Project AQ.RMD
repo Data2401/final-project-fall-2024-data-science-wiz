@@ -55,21 +55,19 @@ glimpse(T_Emission)
 
 ```{r}
 
-DR_data %>% rename(death_rate = Deaths.that.are.from.all.causes.attributed.to.air.pollution.per.100.000.people..in.both.sexes.aged.age.standardized)
+colnames(DR_data)[4] <- "death_rate"
 
+DR_data %>% filter(Year == 1990) %>% arrange(death_rate)
 
+DR_data %>% filter(Year == 2019) %>% arrange(death_rate)
 
-DR_data %>% filter(Year == 1990) %>% arrange(Deaths.that.are.from.all.causes.attributed.to.air.pollution.per.100.000.people..in.both.sexes.aged.age.standardized)
-
-DR_data %>% filter(Year == 2019) %>% arrange(Deaths.that.are.from.all.causes.attributed.to.air.pollution.per.100.000.people..in.both.sexes.aged.age.standardized)
-
-DR_data %>% filter(Entity == "Iceland") %>% arrange(Deaths.that.are.from.all.causes.attributed.to.air.pollution.per.100.000.people..in.both.sexes.aged.age.standardized)
+DR_data %>% filter(Entity == "Iceland") %>% arrange(death_rate)
 ```
 
 
 ```{r}
 #T_Emmission %>% group_by(Item) %>% summarise(ncount = n())
 
-  
+  colnames(DR_data) <- c(country, code, year, death_rate)
 
 ```
