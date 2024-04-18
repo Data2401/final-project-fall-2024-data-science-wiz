@@ -13,10 +13,15 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 ```{r}
-library(tidyverse) 
+#Load tidyverse to neatly present data
+#Load dplyr to manipulate data  
+#Load ggplot2 for presenting the data visually
+#Load countrycode to categorize 
+library(tidyverse)
 library(dplyr)
-library(ggplot2)
-library(countrycode)
+library(ggplot2) 
+library(countrycode) 
+
 ```
 
 ```{r}
@@ -45,7 +50,7 @@ glimpse(T_Emission)
 
 # Introduction
 
-  As an evolving planet and ever-evolving society, one thing has become a pressing concern and that is our world's air quality. Air pollution has caused detrimental effects reaching all sides of the globe.  In this data set, we take a dive into the intricate relationship of air pollution and the negative toll that it takes upon human health that is measured through deaths. All while asking questions such as the correlation of air-polluting factors and how they vary throughout each continent. Through these data sets we will have a greater understanding of the larger problem at hand  and furthermore shed light on this issue at hand.
+  As an evolving planet and ever-evolving society, one thing has become a pressing concern and that is our world's air quality. Air pollution has caused detrimental effects reaching all sides of the globe.  In this data set, we take a dive into the intricate relationship of air pollution and the negative toll that it takes upon human health that is measured through deaths. We will visually showcase the pattern between data sets, all while asking questions such as the correlation of air-polluting factors and how they vary throughout each continent. Through these data sets we will have a greater understanding of the larger problem at hand  and furthermore shed light on this issue at hand.
 
 
 # Questions 
@@ -72,10 +77,10 @@ DR_data %>% filter(Entity == "Iceland") %>% arrange(death_rate)
 
 
 ```{r}
-T_Emmission %>% group_by(Item) %>% summarise(ncount = n())
+T_Emission %>% group_by(Item) %>% summarise(ncount = n())
 
 
-T_Emmission %>% group_by(Element) %>% summarise(ncount = n())
+T_Emission %>% group_by(Element) %>% summarise(ncount = n())
 
 
 
