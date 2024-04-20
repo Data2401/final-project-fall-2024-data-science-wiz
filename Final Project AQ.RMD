@@ -102,17 +102,23 @@ colnames(DR_data)[1] <- "country"
 
 continent_list <- countrycode(sourcevar = DR_data$country,
                             origin = "country.name",
-                            destination = "region") 
+                            destination = "continent") 
 ```
 
 ```{r}
-DR_data_new <- cross_join(DR_data, continent_list, copy = TRUE)
 
-colnames(DR_data_new)[5] <- "continent"
+DR_data[5] <- continent_list
+colnames(DR_data)[5] <- "continent"
+
+
+
+
 
 ```
 
 ```{r}
-ggplot(DR_data_new, aes(x = continent, y= death_rate, color = continent, na.rm = TRUE)) + geom_bar( stat = "identity")
+ggplot(DR_data, aes(x = continent, y= death_rate, color = continent, na.rm = TRUE)) + geom_bar( stat = "identity")
+
+
 
 ```
