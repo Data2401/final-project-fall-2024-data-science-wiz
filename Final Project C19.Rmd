@@ -26,3 +26,15 @@ As an evolving planet and ever-evolving society, one thing has left a mark on th
 - What is the relationship between hospitalization and deaths from covid-19?
 - Is there any correlation between the country population and covid-19 cases?
 - When was the peak of the most cases for covid?  
+
+```{r} 
+#load in data
+data <- read.csv("covid19.csv")
+
+```
+
+```{r}
+ 
+data %>% group_by(Continent_Name) 
+ 
+```
