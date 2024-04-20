@@ -16,7 +16,7 @@ knitr::opts_chunk$set(echo = TRUE)
 #Load tidyverse to neatly present data
 #Load dplyr to manipulate data  
 #Load ggplot2 for presenting the data visually
-#Load countrycode to categorize 
+#Load countrycode to categorize by continent
 library(tidyverse)
 library(dplyr)
 library(ggplot2) 
@@ -36,6 +36,14 @@ What’s interesting about this data is that we can evaluate the relationship be
 
 
 In this set we can see the country, city, the air quality and information on some pollutants in these countries.
+
+```{r}
+GAP <- na.omit(GAP) 
+DR_data <- na.omit(DR_data)
+T_Emission <- na.omit(T_Emission)
+
+```
+
 ```{r}
 glimpse(GAP)
 ```
@@ -95,12 +103,16 @@ colnames(DR_data)[1] <- "country"
 continent_list <- countrycode(sourcevar = DR_data$country,
                             origin = "country.name",
                             destination = "region") 
+```
 
+```{r}
 DR_data_new <- cross_join(DR_data, continent_list, copy = TRUE)
 
 colnames(DR_data_new)[5] <- "continent"
 
+```
 
+```{r}
 ggplot(DR_data_new, aes(x = continent, y= death_rate, color = continent, na.rm = TRUE)) + geom_bar( stat = "identity")
 
 ```
