@@ -1,0 +1,28 @@
+---
+title: "Final Project"
+author: "Claudia Lopez & Vanessa Ortiz"
+date: "2024-04-20"
+output: html_document
+---
+
+```{r setup, include=FALSE, message= FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(tidyverse)
+library(ggplot2) 
+```
+
+# Introduction 
+
+As an evolving planet and ever-evolving society, one thing has left a mark on the world . Covid-19 caused detrimental effects reaching all sides of the globe.  In this data set, we take a dive into the relationship of covid- 19 and the negative toll that it took upon human health that is measured through deaths. We will visually showcase the pattern between the data sets, All while asking questions such as the correlation of covid-19 and how they varied throughout each continent.  Through these data sets we will have a greater understanding of the once critical problem that took the lives of many. 
+ 
+
+# Questions
+
+- What are the top 10 countries with the most covid-19 cases?
+- What are the top 5 countries with the least covid-19 cases?
+- What is the relationship between hospitalization and deaths from covid-19?
+- Is there any correlation between the country population and covid-19 cases?
+- When was the peak of the most cases for covid?  
