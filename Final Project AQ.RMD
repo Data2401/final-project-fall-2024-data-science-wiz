@@ -85,3 +85,22 @@ T_Emission %>% group_by(Element) %>% summarise(ncount = n())
 
 
 ```
+
+
+
+```{r}
+colnames(DR_data)[1] <- "country"
+
+
+continent_list <- countrycode(sourcevar = DR_data$country,
+                            origin = "country.name",
+                            destination = "region") 
+
+DR_data_new <- cross_join(DR_data, continent_list, copy = TRUE)
+
+colnames(DR_data_new)[5] <- "continent"
+
+
+ggplot(DR_data_new, aes(x = continent, y= death_rate, color = continent, na.rm = TRUE)) + geom_bar( stat = "identity")
+
+```
