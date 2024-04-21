@@ -33,28 +33,46 @@ As an evolving planet and ever-evolving society, one thing has left a mark on th
 covid19_data <- read.csv("covid19.csv")
 pop_data <- read.csv("population_by_country_2020.csv")
 
+covid19_data %>% filter(Province_State == "All States")
 ```
 
-```{r}
- #trying to find the top 10 most cases
-covid19_data %>% filter(Province_State == "All States") %>% arrange(-positive)
- 
-```
 
+## Filtering the data 
 ```{r}
 #separating the date column into separate columns to filter better for each month
-colnames(covid19_data)[1] <- "date"
+colnames(covid19_data)[1] <- "date" 
 covid19_data$date <- as.Date(covid19_data$date)
 c19_dd <- data.frame(date = covid19_data$date,
                               year = as.numeric(format(covid19_data$date, format = "%y")), 
                               month = as.numeric(format(covid19_data$date, format = "%m")), 
                               day = as.numeric(format(covid19_data$date, format = "%d")))
 
+#joined the original dataset with the newly created dataset with the separated columns
+new_covid19_data <- full_join(c19_dd, covid19_data, by = join_by(date)) 
 
-new_covid19_data <- full_join(c19_dd, covid19_data, by = join_by(date))
+#filtering to keep 'all states' for each country 
+new_covid19_data <- new_covid19_data %>% filter(Province_State == "All States")
 
+#removes any duplicated rows
+Final_covid19_data <- new_covid19_data %>% distinct(month, day, Continent_Name,Country_Region, Province_State, positive, hospitalized, .keep_all = TRUE)
+
+# this is to check to make sure the data was properly filtered
+Final_covid19_data %>% filter(month == "2") %>% arrange(-positive)
 ```
+
 ```{r}
+#this section im trying to filter out the US Data 
+new_covid19_data %>% filter(month == "2") %>% arrange(-positive) %>% select(month, Country_Region, positive) 
+
+US_data <- new_covid19_data %>% filter(Country_Region == "United States", Province_State == "All States")
+
+US_data %>% arrange(-positive) 
+
+US_data[!duplicated(US_data$day), ]
+#shows how many duplicated rows of each
+
+US_data <- US_data %>% distinct(month,day, .keep_all = TRUE)
+#this eliminates the duplicated rows based on month and day, as in it keeps one entry per day
 
 
 ```
