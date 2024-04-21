@@ -29,13 +29,13 @@ As an evolving planet and ever-evolving society, one thing has left a mark on th
 
 ```{r} 
 #load in data
-data <- read.csv("covid19.csv")
+covid19_data <- read.csv("covid19.csv")
 pop_data <- read.csv("population_by_country_2020.csv")
 
 ```
 
 ```{r}
  
-data %>% group_by(Continent_Name) 
+covid19_data %>% group_by(Continent_Name) 
  
 ```

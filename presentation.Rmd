@@ -10,27 +10,33 @@ output:
 knitr::opts_chunk$set(echo = FALSE)
 ```
 
-## R Markdown
+## R INTRODUCTION
 
-This is an R Markdown presentation. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+  
 
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document.
+## Questions
 
-## Slide with Bullets
+- What are the top 10 countries with the most covid-19 cases?
+- What are the top 5 countries with the least covid-19 cases?
+- What is the relationship between hospitalization and deaths from covid-19?
+- Is there any correlation between the country population and covid-19 cases?
+- When was the peak of the most cases for covid?  
 
-- Bullet 1
-- Bullet 2
-- Bullet 3
+## Packages Used
 
-## Slide with R Output
+```{r}
+library(tidyverse)
+library(ggplot2)
 
-```{r cars, echo = TRUE}
-summary(cars)
 ```
+## Unfiltered Data 
+```{r}
 
-## Slide with Plot
+glimpse(covid19_data)
 
-```{r pressure}
-plot(pressure)
 ```
+## Data Key Terms
 
+## Answers 
+
+## Summary
