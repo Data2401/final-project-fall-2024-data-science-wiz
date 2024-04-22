@@ -5,7 +5,7 @@ date: "2024-04-20"
 output: html_document
 ---
 
-```{r setup, include=FALSE, message= FALSE}
+```{r setup, include=FALSE, message = FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
@@ -56,26 +56,27 @@ new_covid19_data <- new_covid19_data %>% filter(Province_State == "All States")
 Final_covid19_data <- new_covid19_data %>% distinct(month, day, Continent_Name,Country_Region, Province_State, positive, hospitalized, .keep_all = TRUE)
 
 # this is to check to make sure the data was properly filtered
-Final_covid19_data %>% filter(month == "2") %>% arrange(-positive)
+Final_covid19_data %>% filter(month == "2") %>% arrange(-positive) %>% head(10)
 ```
 
 ```{r}
 #this section im trying to filter out the US Data 
-new_covid19_data %>% filter(month == "2") %>% arrange(-positive) %>% select(month, Country_Region, positive) 
+new_covid19_data %>% filter(month == "2") %>% arrange(-positive) %>% select(month, Country_Region, positive)  %>% head(10)
 
 US_data <- new_covid19_data %>% filter(Country_Region == "United States", Province_State == "All States")
 
-US_data %>% arrange(-positive) 
+US_data %>% arrange(-positive) %>% head(5)
 
-US_data[!duplicated(US_data$day), ]
-#shows how many duplicated rows of each
+#shows how many duplicated rows of each, in the knit file it prints out too long so i have marked it out for now
+#US_data[!duplicated(US_data$day), ] 
+
 
 US_data <- US_data %>% distinct(month,day, .keep_all = TRUE)
 #this eliminates the duplicated rows based on month and day, as in it keeps one entry per day
 
 
 ```
-
+# Question 1:
 ```{r}
 #top 10 most cases
 
@@ -86,7 +87,7 @@ Final_covid19_data %>% group_by(Country_Region) %>% summarize_at(vars(positive),
 Final_covid19_data %>% group_by(Country_Region) %>% summarize_at(vars(positive), list(mean = mean), na.rm = T) %>% arrange(-mean) %>% head(10)
 
 ```
-
+# Question 2:
 ```{r}
 #top 5 countries with least cases 
 
@@ -94,6 +95,18 @@ Final_covid19_data %>% group_by(Country_Region) %>% summarize_at(vars(positive),
 
 #top 10 countries with the least cases on average
 Final_covid19_data %>% group_by(Country_Region) %>% summarize_at(vars(positive), list(mean = mean), na.rm = T) %>% arrange(mean) %>% head(10)
+```
+# Question 5:
+```{r}
+#when was peak for most cases for most covid cases
+most_cases_per_month <- Final_covid19_data %>% group_by(month, Continent_Name) %>% summarize_at(vars(positive), list(max = max), na.rm = T) %>% arrange(-max)
+
+#graph 
+ggplot(most_cases_per_month, aes(x = month, y = max, color = Continent_Name)) + geom_point(size = 3) 
+
+
+# separated by continent
+ggplot(most_cases_per_month, aes(x = month, y = max, color = Continent_Name)) + geom_point(size = 3) + facet_wrap(~ Continent_Name)
 ```
 
 
