@@ -12,7 +12,7 @@ knitr::opts_chunk$set(echo = TRUE)
 ```{r}
 library(tidyverse)
 library(ggplot2) 
-library(lubridate)
+library(lubridate) #this package was used to separate the dates into separate columns
 ```
 
 # Introduction 
@@ -74,6 +74,26 @@ US_data <- US_data %>% distinct(month,day, .keep_all = TRUE)
 #this eliminates the duplicated rows based on month and day, as in it keeps one entry per day
 
 
+```
+
+```{r}
+#top 10 most cases
+
+Final_covid19_data %>% group_by(Country_Region) %>% summarize_at(vars(positive), list(max = max), na.rm = T) %>% arrange(-max) %>% head(10)
+
+#top 10 countries with most cases on average
+
+Final_covid19_data %>% group_by(Country_Region) %>% summarize_at(vars(positive), list(mean = mean), na.rm = T) %>% arrange(-mean) %>% head(10)
+
+```
+
+```{r}
+#top 5 countries with least cases 
+
+Final_covid19_data %>% group_by(Country_Region) %>% summarize_at(vars(positive), list(max = max), na.rm = T) %>% arrange(max) %>% head(5)
+
+#top 10 countries with the least cases on average
+Final_covid19_data %>% group_by(Country_Region) %>% summarize_at(vars(positive), list(mean = mean), na.rm = T) %>% arrange(mean) %>% head(10)
 ```
 
 
