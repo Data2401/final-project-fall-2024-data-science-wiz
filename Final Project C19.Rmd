@@ -47,7 +47,7 @@ c19_dd <- data.frame(date = covid19_data$date,
                               day = as.numeric(format(covid19_data$date, format = "%d")))
 
 #joined the original dataset with the newly created dataset with the separated columns
-new_covid19_data <- full_join(c19_dd, covid19_data, by = join_by(date)) 
+new_covid19_data <- full_join(c19_dd, covid19_data, by = "date") 
 
 #filtering to keep 'all states' for each country 
 new_covid19_data <- new_covid19_data %>% filter(Province_State == "All States")
@@ -56,7 +56,7 @@ new_covid19_data <- new_covid19_data %>% filter(Province_State == "All States")
 Final_covid19_data <- new_covid19_data %>% distinct(month, day, Continent_Name,Country_Region, Province_State, positive, hospitalized, .keep_all = TRUE)
 
 # this is to check to make sure the data was properly filtered
-Final_covid19_data %>% filter(month == "2") %>% arrange(-positive) %>% head(10)
+Final_covid19_data %>% filter(month == 2) %>% arrange(-positive) %>% head(10)
 ```
 
 ```{r}
@@ -78,13 +78,46 @@ US_data <- US_data %>% distinct(month,day, .keep_all = TRUE)
 ```
 # Question 1:
 ```{r}
-#top 10 most cases
+#top 10 countries with most cases
 
 Final_covid19_data %>% group_by(Country_Region) %>% summarize_at(vars(positive), list(max = max), na.rm = T) %>% arrange(-max) %>% head(10)
+
+#Filtering data for the countries with the top 10 cases
+top_10_countries <- Final_covid19_data %>% 
+  group_by(Country_Region) %>% 
+  summarize(total_cases = max(positive, na.rm = TRUE)) %>% 
+  top_n(10, total_cases) %>% 
+  arrange(desc(total_cases))
+
+# Create the bar plot
+ggplot(top_10_countries, aes(x = reorder(Country_Region, total_cases), y = total_cases)) +
+  geom_bar(stat = "identity", fill = "skyblue") +
+  labs(title = "Top 10 Countries with Most COVID-19 Cases",
+       x = "Country",
+       y = "Total Cases") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+  coord_flip()
 
 #top 10 countries with most cases on average
 
 Final_covid19_data %>% group_by(Country_Region) %>% summarize_at(vars(positive), list(mean = mean), na.rm = T) %>% arrange(-mean) %>% head(10)
+
+# Filter the data to get the top 10 countries with the highest average cases
+top_10_avg_countries <- Final_covid19_data %>%
+  group_by(Country_Region) %>%
+  summarize(mean_cases = mean(positive, na.rm = TRUE)) %>%
+  top_n(10, mean_cases) %>%
+  arrange(desc(mean_cases))
+
+# Create the bar plot
+ggplot(top_10_avg_countries, aes(x = reorder(Country_Region, mean_cases), y = mean_cases)) +
+  geom_bar(stat = "identity", fill ="lightpink") +
+  labs(title = "Top 10 Countries with Highest Average COVID-19 Cases",
+       x = "Country",
+       y = "Average Cases") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+  coord_flip()
+
 
 ```
 # Question 2:
@@ -93,8 +126,25 @@ Final_covid19_data %>% group_by(Country_Region) %>% summarize_at(vars(positive),
 
 Final_covid19_data %>% group_by(Country_Region) %>% summarize_at(vars(positive), list(max = max), na.rm = T) %>% arrange(max) %>% head(5)
 
+least_5_countries <- Final_covid19_data %>%
+  group_by(Country_Region) %>%
+  summarize(total_cases = max(positive, na.rm = TRUE)) %>%
+  top_n(5, total_cases) %>%
+  arrange(total_cases)
+
+# Create the bar plot
+ggplot(least_5_countries, aes(x = Country_Region, y = total_cases, color = Country_Region)) + geom_point(size = 3) +
+  labs(title = "Top 5 Countries with Least COVID-19 Cases",
+       x = "Country",
+       y = "Total Cases")
+
 #top 10 countries with the least cases on average
 Final_covid19_data %>% group_by(Country_Region) %>% summarize_at(vars(positive), list(mean = mean), na.rm = T) %>% arrange(mean) %>% head(10)
+```
+# Question 4: 
+```{r}
+
+
 ```
 # Question 5:
 ```{r}
