@@ -180,7 +180,15 @@ Final_covid19_data %>% group_by(Country_Region) %>% summarise_at(vars(death), li
 q3_data <-Final_covid19_data %>% group_by(Country_Region, Continent_Name) %>% summarise_at(vars(hospitalizedCurr, death), list(max = max), na.rm = TRUE) %>% filter_if(is.numeric, all_vars((.)!= 0))
 q3_data
 
-#attempts at graphing
+glimpse(q3_data)
+
+#attempts at graphing 
+
+
+
+
+
+
 ggplot(q3_data, aes(x = hospitalizedCurr_max, y = death_max, color = Country_Region)) + geom_point()
 
 ggplot(q3_data, aes(x = death_max)) + geom_histogram(binwidth = 5)
