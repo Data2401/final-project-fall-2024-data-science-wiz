@@ -33,6 +33,8 @@ As an evolving planet and ever-evolving society, one thing has left a mark on th
 covid19_data <- read.csv("covid19.csv")
 pop_data <- read.csv("population_by_country_2020.csv")
 
+
+
 ```
 
 
@@ -79,6 +81,8 @@ US_data <- US_data %>% distinct(month,day, .keep_all = TRUE)
 # Question 1:
 ```{r}
 #top 10 countries with most cases
+na.omit(Final_covid19_data)
+na.omit(pop_data)
 
 Final_covid19_data %>% group_by(Country_Region) %>% summarize_at(vars(positive), list(max = max), na.rm = T) %>% arrange(-max) %>% head(10)
 
@@ -162,10 +166,17 @@ ggplot(bottom_10_avg_countries, aes(x = reorder(Country_Region, mean_cases), y =
        y = "Average Cases") +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 ```
+# Question 3
+```{r}
+
+
+```
+
+
 # Question 4: 
 ```{r}
-# Merge COVID-19 data with population data
-merged_data <- merge
+# Merge COVID-19 data with population 
+
 
 ```
 # Question 5:
