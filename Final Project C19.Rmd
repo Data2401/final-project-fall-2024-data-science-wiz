@@ -126,20 +126,41 @@ ggplot(top_10_avg_countries, aes(x = reorder(Country_Region, mean_cases), y = me
 
 Final_covid19_data %>% group_by(Country_Region) %>% summarize_at(vars(positive), list(max = max), na.rm = T) %>% arrange(max) %>% head(5)
 
-least_5_countries <- Final_covid19_data %>%
+#Filtering data
+top_5_least_countries <- Final_covid19_data %>%
   group_by(Country_Region) %>%
   summarize(total_cases = max(positive, na.rm = TRUE)) %>%
-  top_n(5, total_cases) %>%
-  arrange(total_cases)
+  arrange(total_cases) %>%
+  head(5)
 
-# Create the bar plot
-ggplot(least_5_countries, aes(x = Country_Region, y = total_cases, color = Country_Region)) + geom_point(size = 3) +
+# Filter the data for the selected countries
+top_5_least_data <- Final_covid19_data %>%
+  filter(Country_Region %in% top_5_least_countries$Country_Region)
+
+# Create the scatter plot
+ggplot(top_5_least_data, aes(x = date, y = positive, color = Country_Region)) +
+  geom_point() +
   labs(title = "Top 5 Countries with Least COVID-19 Cases",
-       x = "Country",
-       y = "Total Cases")
-
+       x = "Date",
+       y = "Total Cases") +
+  theme_minimal()
 #top 10 countries with the least cases on average
 Final_covid19_data %>% group_by(Country_Region) %>% summarize_at(vars(positive), list(mean = mean), na.rm = T) %>% arrange(mean) %>% head(10)
+
+bottom_10_avg_countries <- Final_covid19_data %>%
+  group_by(Country_Region) %>%
+  summarize(mean_cases = mean(positive, na.rm = TRUE)) %>%
+  top_n(10, -mean_cases) %>%
+  arrange(mean_cases)
+
+# Create the line plot
+ggplot(bottom_10_avg_countries, aes(x = reorder(Country_Region, mean_cases), y = mean_cases)) +
+  geom_line(color = "darkred") +
+  geom_point(color = "darkred") +
+  labs(title = "Top 10 Countries with Least Average COVID-19 Cases",
+       x = "Country",
+       y = "Average Cases") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
 ```
 # Question 4: 
 ```{r}
