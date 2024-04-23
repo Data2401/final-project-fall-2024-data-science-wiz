@@ -184,7 +184,7 @@ glimpse(q3_data)
 ggplot(q3_data, aes(x = reorder(death_max, -hospitalizedCurr_max), y = hospitalizedCurr_max, fill = Country_Region)) +
   geom_col() +
   labs(title = "Realtionship between hospitalization and deaths",
-       x = "Country",
+       x = "Deaths",
        y = "Hospitalized Cases",
        fill = "Country") +
   theme(axis.text.x = element_text(angle = 35, hjust = 1))
