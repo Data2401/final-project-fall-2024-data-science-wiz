@@ -81,8 +81,7 @@ US_data <- US_data %>% distinct(month,day, .keep_all = TRUE)
 # Question 1:
 ```{r}
 #top 10 countries with most cases
-na.omit(Final_covid19_data)
-na.omit(pop_data)
+
 
 Final_covid19_data %>% group_by(Country_Region) %>% summarize_at(vars(positive), list(max = max), na.rm = T) %>% arrange(-max) %>% head(10)
 
@@ -99,7 +98,6 @@ ggplot(top_10_countries, aes(x = reorder(Country_Region, total_cases), y = total
   labs(title = "Top 10 Countries with Most COVID-19 Cases",
        x = "Country",
        y = "Total Cases") +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
   coord_flip()
 
 #top 10 countries with most cases on average
@@ -119,7 +117,6 @@ ggplot(top_10_avg_countries, aes(x = reorder(Country_Region, mean_cases), y = me
   labs(title = "Top 10 Countries with Highest Average COVID-19 Cases",
        x = "Country",
        y = "Average Cases") +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
   coord_flip()
 
 
@@ -159,7 +156,6 @@ bottom_10_avg_countries <- Final_covid19_data %>%
 
 # Create the line plot
 ggplot(bottom_10_avg_countries, aes(x = reorder(Country_Region, mean_cases), y = mean_cases)) +
-  geom_line(color = "darkred") +
   geom_point(color = "darkred") +
   labs(title = "Top 10 Countries with Least Average COVID-19 Cases",
        x = "Country",
@@ -170,7 +166,7 @@ ggplot(bottom_10_avg_countries, aes(x = reorder(Country_Region, mean_cases), y =
 ```{r}
 #relationship between hospitalization and deaths from covid-19?
 
-#countries with hospitalized dat 
+#countries with hospitalized data 
 Final_covid19_data %>% group_by(Country_Region) %>% summarise_at(vars(hospitalizedCurr), list(max = max), na.rm = TRUE) %>% arrange(-max) %>% head(10)
 
 #countries with death data
@@ -185,15 +181,13 @@ glimpse(q3_data)
 #attempts at graphing 
 
 
-
-
-
-
-ggplot(q3_data, aes(x = hospitalizedCurr_max, y = death_max, color = Country_Region)) + geom_point()
-
-ggplot(q3_data, aes(x = death_max)) + geom_histogram(binwidth = 5)
-
-
+ggplot(q3_data, aes(x = reorder(death_max, -hospitalizedCurr_max), y = hospitalizedCurr_max, fill = Country_Region)) +
+  geom_col() +
+  labs(title = "Realtionship between hospitalization and deaths",
+       x = "Country",
+       y = "Hospitalized Cases",
+       fill = "Country") +
+  theme(axis.text.x = element_text(angle = 35, hjust = 1))
 
 ```
 
