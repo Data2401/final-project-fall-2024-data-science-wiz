@@ -168,6 +168,23 @@ ggplot(bottom_10_avg_countries, aes(x = reorder(Country_Region, mean_cases), y =
 ```
 # Question 3
 ```{r}
+#relationship between hospitalization and deaths from covid-19?
+
+#countries with hospitalized dat 
+Final_covid19_data %>% group_by(Country_Region) %>% summarise_at(vars(hospitalizedCurr), list(max = max), na.rm = TRUE) %>% arrange(-max) %>% head(10)
+
+#countries with death data
+Final_covid19_data %>% group_by(Country_Region) %>% summarise_at(vars(death), list(max = max), na.rm = TRUE) %>% arrange(-max)
+
+#mini dataset with death and hospitalized data
+q3_data <-Final_covid19_data %>% group_by(Country_Region, Continent_Name) %>% summarise_at(vars(hospitalizedCurr, death), list(max = max), na.rm = TRUE) %>% filter_if(is.numeric, all_vars((.)!= 0))
+q3_data
+
+#attempts at graphing
+ggplot(q3_data, aes(x = hospitalizedCurr_max, y = death_max, color = Country_Region)) + geom_point()
+
+ggplot(q3_data, aes(x = death_max)) + geom_histogram(binwidth = 5)
+
 
 
 ```
