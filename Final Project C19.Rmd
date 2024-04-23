@@ -5,11 +5,11 @@ date: "2024-04-20"
 output: html_document
 ---
 
-```{r setup, include=FALSE, message = FALSE}
+```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-```{r}
+```{r, message=FALSE}
 library(tidyverse)
 library(ggplot2) 
 library(lubridate) #this package was used to separate the dates into separate columns
@@ -37,7 +37,7 @@ pop_data <- read.csv("population_by_country_2020.csv")
 
 
 ## Filtering the data 
-```{r}
+```{r, message=FALSE}
 #separating the date column into separate columns to filter better for each month
 colnames(covid19_data)[1] <- "date" 
 covid19_data$date <- as.Date(covid19_data$date)
