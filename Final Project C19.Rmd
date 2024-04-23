@@ -164,7 +164,8 @@ ggplot(bottom_10_avg_countries, aes(x = reorder(Country_Region, mean_cases), y =
 ```
 # Question 4: 
 ```{r}
-
+# Merge COVID-19 data with population data
+merged_data <- merge
 
 ```
 # Question 5:
