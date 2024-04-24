@@ -1,6 +1,6 @@
 ---
 title: "Presentation"
-author: "Claudia Lopez"
+author: "Vanessa Ortiz & Claudia Lopez"
 date: "2024-04-21"
 output: 
   slidy_presentation 
@@ -10,7 +10,7 @@ output:
 knitr::opts_chunk$set(echo = FALSE, warning = FALSE)
 ```
 
-## R INTRODUCTION
+## Introduction
 
   The data used was collected from ___ which shows data collected from Covid 19 cases for the first 6 months of 2020 from over 100 countries. We also used data from ___ to collect the population of each country in 2020.
   
@@ -129,7 +129,7 @@ ggplot(top_10_avg_countries, aes(x = reorder(Country_Region, mean_cases), y = me
 
 ```
 
-## Top 5 Countries with Least Cases on Average
+## Top 10 Countries with Least Cases on Average
 ```{r}
 #Final_covid19_data %>% group_by(Country_Region) %>% summarize_at(vars(positive), list(mean = mean), na.rm = T) %>% arrange(mean) %>% head(10)
 
@@ -193,9 +193,9 @@ ggplot(q4_data, aes(population, percentage, color = Continent_Name)) +geom_point
 ### Africa
 ```{r}
 
-q4_africa <- q4_data %>% filter(Continent_Name == "Africa") %>% arrange(-population) %>% head(10) 
+q4_africa <- q4_data %>% filter(Continent_Name == "Africa") %>% arrange(-population)  
 
-ggplot(q4_africa, aes(x= reorder(Country_Region, -percentage), y = percentage, fill = Country_Region)) + geom_bar(stat= "identity") + scale_y_continuous(labels = percent)
+ggplot(q4_africa, aes(x= reorder(Country_Region, -percentage), y = percentage)) + geom_bar(stat= "identity",show.legend = FALSE, fill = "#F8766D") + scale_y_continuous(labels = percent) +  labs(x = "Country",y = "Cases Percentage")
 
 ```
 
@@ -205,11 +205,9 @@ ggplot(q4_africa, aes(x= reorder(Country_Region, -percentage), y = percentage, f
 
 q4_Asia <- q4_data %>% filter(Continent_Name == "Asia") %>% head(10)
 
-q4_Asia <- q4_Asia %>% filter(Country_Region == "North Korea"  | Country_Region == "South Korea" | Country_Region == "Japan"| Country_Region == "India" | Country_Region == "Iran" | Country_Region == "Russia" | Country_Region == "Singapore" | Country_Region == "Vietnam" | Country_Region == "Lebanon" | Country_Region == "Thailand" ) %>% arrange( Country_Region)
-  
-
-ggplot(q4_Asia, aes(x= reorder(Country_Region, -percentage), y = percentage, fill = Country_Region)) + geom_bar(stat= "identity")+ scale_y_continuous(labels = percent)
-
+ggplot(q4_Asia, aes(x= reorder(Country_Region, -percentage), y = percentage, fill = Country_Region)) + geom_bar(stat= "identity",show.legend = FALSE, fill = "#B79F00")+ scale_y_continuous(labels = percent) +  labs(
+       x = "Country",
+       y = "Cases Percentage")
 ```
 
 ## Correlation between Population and Covid-19 Cases
@@ -218,7 +216,9 @@ ggplot(q4_Asia, aes(x= reorder(Country_Region, -percentage), y = percentage, fil
 
 q4_europe <- q4_data %>% filter(Continent_Name == "Europe") %>% head(10)
 
-ggplot(q4_europe, aes(x= reorder(Country_Region, -percentage), y = percentage, fill = Country_Region)) + geom_bar(stat= "identity")+ scale_y_continuous(labels = percent)
+ggplot(q4_europe, aes(x= reorder(Country_Region, -percentage), y = percentage, fill = Country_Region)) + geom_bar(stat= "identity",show.legend = FALSE, fill = "#00BA38") + scale_y_continuous(labels = percent) +  labs(
+       x = "Country",
+       y = "Cases Percentage")
 
 ```
 
@@ -228,7 +228,10 @@ ggplot(q4_europe, aes(x= reorder(Country_Region, -percentage), y = percentage, f
 
 q4_NA <- q4_data %>% filter(Continent_Name == "North America") %>% head(10)
 
-ggplot(q4_NA, aes(x= reorder(Country_Region, -percentage), y = percentage, fill = Country_Region)) + geom_bar(stat= "identity") + scale_y_continuous(labels = percent)
+ggplot(q4_NA, aes(x= reorder(Country_Region, -percentage), y = percentage, fill = Country_Region)) + geom_bar(stat= "identity",show.legend = FALSE, fill = "#00BFC4") + scale_y_continuous(labels = percent) +  labs(
+       x = "Country",
+       y = "Cases Percentage")
+
 
 ```
 
@@ -238,7 +241,9 @@ ggplot(q4_NA, aes(x= reorder(Country_Region, -percentage), y = percentage, fill 
 
 q4_SA <- q4_data %>% filter(Continent_Name == "South America")
 
-ggplot(q4_SA, aes(x= reorder(Country_Region, -percentage), y = percentage, fill = Country_Region)) + geom_bar(stat= "identity") + scale_y_continuous(labels = percent)
+ggplot(q4_SA, aes(x= reorder(Country_Region, -percentage), y = percentage)) + geom_bar(stat= "identity",show.legend = FALSE, fill = "#F564E3") + scale_y_continuous(labels = percent) +  labs(
+       x = "Country",
+       y = "Cases Percentage")
 
 ```
 
@@ -258,3 +263,6 @@ ggplot(most_cases_per_month, aes(x = month, y = max, color = Continent_Name)) + 
 ```
 
 ## Summary
+
+
+
