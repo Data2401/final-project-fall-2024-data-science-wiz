@@ -61,7 +61,7 @@ Final_covid19_data <- new_covid19_data %>% distinct(month, day, Continent_Name,C
 # this is to check to make sure the data was properly filtered
 Final_covid19_data %>% filter(month == 2) %>% arrange(-positive) %>% head(10)
 ```
-
+#unnecessary and can be removed for final project
 ```{r}
 #this section im trying to filter out the US Data 
 new_covid19_data %>% filter(month == "2") %>% arrange(-positive) %>% select(month, Country_Region, positive)  %>% head(10)
@@ -146,6 +146,7 @@ ggplot(top_5_least_data, aes(x = date, y = positive, color = Country_Region)) +
        x = "Date",
        y = "Total Cases") +
   theme_minimal()
+
 #top 10 countries with the least cases on average
 Final_covid19_data %>% group_by(Country_Region) %>% summarize_at(vars(positive), list(mean = mean), na.rm = T) %>% arrange(mean) %>% head(10)
 
@@ -195,7 +196,6 @@ ggplot(q3_data, aes(x = reorder(death_max, -hospitalizedCurr_max), y = hospitali
 
 # Question 4: 
 ```{r, message=FALSE}
-# Merge COVID-19 data with population 
 #Is there any correlation between the country population and covid-19 cases?
 
 new_pop <- pop_data %>% select(Country..or.dependency., Population..2020.)
@@ -230,7 +230,7 @@ ggplot(q4_data, aes(population, percentage, color = Continent_Name)) +geom_point
 ```{r}
 q4_africa <- q4_data %>% filter(Continent_Name == "Africa") %>% arrange(-population) %>% head(10) 
 
-ggplot(q4_africa, aes(x= Country_Region, y = percentage, fill = Country_Region)) + geom_bar(stat= "identity")
+ggplot(q4_africa, aes(x= Country_Region, y = percentage, fill = Country_Region)) + geom_bar(stat= "identity") + scale_y_continuous(labels = percent)
 
 ```
 
@@ -241,7 +241,7 @@ q4_Asia <- q4_data %>% filter(Continent_Name == "Asia")
 q4_Asia <- q4_Asia %>% filter(Country_Region == "North Korea"  | Country_Region == "South Korea" | Country_Region == "Japan"| Country_Region == "India" | Country_Region == "Iran" | Country_Region == "Russia" | Country_Region == "Singapore" | Country_Region == "Vietnam" | Country_Region == "Lebanon" | Country_Region == "Thailand" ) %>% arrange( Country_Region)
   
 
-ggplot(q4_Asia, aes(x= Country_Region, y = percentage, fill = Country_Region)) + geom_bar(stat= "identity")
+ggplot(q4_Asia, aes(x= Country_Region, y = percentage, fill = Country_Region)) + geom_bar(stat= "identity")+ scale_y_continuous(labels = percent)
 
 ```
 
@@ -249,7 +249,7 @@ ggplot(q4_Asia, aes(x= Country_Region, y = percentage, fill = Country_Region)) +
 ```{r}
 q4_europe <- q4_data %>% filter(Continent_Name == "Europe") %>% head(10)
 
-ggplot(q4_europe, aes(x= Country_Region, y = percentage, fill = Country_Region)) + geom_bar(stat= "identity")
+ggplot(q4_europe, aes(x= Country_Region, y = percentage, fill = Country_Region)) + geom_bar(stat= "identity")+ scale_y_continuous(labels = percent)
 
 ```
 
@@ -257,7 +257,7 @@ ggplot(q4_europe, aes(x= Country_Region, y = percentage, fill = Country_Region))
 ```{r}
 q4_NA <- q4_data %>% filter(Continent_Name == "North America") %>% head(10)
 
-ggplot(q4_NA, aes(x= Country_Region, y = percentage, fill = Country_Region)) + geom_bar(stat= "identity")
+ggplot(q4_NA, aes(x= Country_Region, y = percentage, fill = Country_Region)) + geom_bar(stat= "identity") + scale_y_continuous(labels = percent)
 
 ```
 
@@ -266,7 +266,7 @@ ggplot(q4_NA, aes(x= Country_Region, y = percentage, fill = Country_Region)) + g
 ```{r}
 q4_SA <- q4_data %>% filter(Continent_Name == "South America")
 
-ggplot(q4_SA, aes(x= Country_Region, y = percentage, fill = Country_Region)) + geom_bar(stat= "identity")
+ggplot(q4_SA, aes(x= Country_Region, y = percentage, fill = Country_Region)) + geom_bar(stat= "identity") + scale_y_continuous(labels = percent)
 
 ```
 
