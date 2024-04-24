@@ -13,6 +13,7 @@ knitr::opts_chunk$set(echo = TRUE)
 library(tidyverse)
 library(ggplot2) 
 library(lubridate) #this package was used to separate the dates into separate columns
+library(scales) #this package was used to label the axis with percent
 ```
 
 # Introduction 
@@ -193,9 +194,35 @@ ggplot(q3_data, aes(x = reorder(death_max, -hospitalizedCurr_max), y = hospitali
 
 
 # Question 4: 
-```{r}
+```{r, message=FALSE}
 # Merge COVID-19 data with population 
+#Is there any correlation between the country population and covid-19 cases?
 
+new_pop <- pop_data %>% select(Country..or.dependency., Population..2020.)
+
+
+colnames(new_pop)[1] <- "Country_Region"
+colnames(new_pop)[2] <- "population"
+
+q4_data <- full_join(new_pop, Final_covid19_data)
+
+
+#filtering data
+q4_data <- q4_data %>% group_by(Continent_Name, Country_Region, population) %>% summarize_at(vars(positive), list(max = max), na.rm = T) %>% arrange(-max) %>% head(108)
+
+#renaming the column to 'cases' 
+colnames(q4_data)[4] <- "cases"
+
+#making a column with the percentage of covid cases to the population of the countries
+q4_data$percentage <- (q4_data$cases * 100) / q4_data$population
+
+
+#graphs 
+#graph 1 shows the percentage of cases throughout each country divided by continents
+ggplot(q4_data, aes(population, percentage, color = Continent_Name)) +geom_point(size = 2, alpha = 1/2) + scale_y_continuous(labels = percent) + facet_wrap(~ Continent_Name) + scale_x_log10()
+
+#vanessa if you see this i'll add the other graphs tomorrow (wed) 
+#I'm still messing around with them. 
 
 ```
 # Question 5:
