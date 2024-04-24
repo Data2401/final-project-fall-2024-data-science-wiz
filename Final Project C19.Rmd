@@ -218,11 +218,58 @@ q4_data$percentage <- (q4_data$cases * 100) / q4_data$population
 
 
 #graphs 
-#graph 1 shows the percentage of cases throughout each country divided by continents
+#graph 1 shows the percentage of cases throughout each country 
+
+ggplot(q4_data, aes(population, percentage, color = Continent_Name)) +geom_point(size = 2, alpha = 1/2) + scale_y_continuous(labels = percent)  + scale_x_log10()
+
+#graph 2 divides it into continents
 ggplot(q4_data, aes(population, percentage, color = Continent_Name)) +geom_point(size = 2, alpha = 1/2) + scale_y_continuous(labels = percent) + facet_wrap(~ Continent_Name) + scale_x_log10()
 
-#vanessa if you see this i'll add the other graphs tomorrow (wed) 
-#I'm still messing around with them. 
+```
+### question 4 part Africa
+```{r}
+q4_africa <- q4_data %>% filter(Continent_Name == "Africa") %>% arrange(-population) %>% head(10) 
+
+ggplot(q4_africa, aes(x= Country_Region, y = percentage, fill = Country_Region)) + geom_bar(stat= "identity")
+
+```
+
+### question 4 part Asia
+```{r}
+q4_Asia <- q4_data %>% filter(Continent_Name == "Asia")
+
+q4_Asia <- q4_Asia %>% filter(Country_Region == "North Korea"  | Country_Region == "South Korea" | Country_Region == "Japan"| Country_Region == "India" | Country_Region == "Iran" | Country_Region == "Russia" | Country_Region == "Singapore" | Country_Region == "Vietnam" | Country_Region == "Lebanon" | Country_Region == "Thailand" ) %>% arrange( Country_Region)
+  
+
+ggplot(q4_Asia, aes(x= Country_Region, y = percentage, fill = Country_Region)) + geom_bar(stat= "identity")
+
+```
+
+### question 4 part Europe
+```{r}
+q4_europe <- q4_data %>% filter(Continent_Name == "Europe") %>% head(10)
+
+ggplot(q4_europe, aes(x= Country_Region, y = percentage, fill = Country_Region)) + geom_bar(stat= "identity")
+
+```
+
+### question 4 part NA
+```{r}
+q4_NA <- q4_data %>% filter(Continent_Name == "North America") %>% head(10)
+
+ggplot(q4_NA, aes(x= Country_Region, y = percentage, fill = Country_Region)) + geom_bar(stat= "identity")
+
+```
+
+
+### question 4 part SA
+```{r}
+q4_SA <- q4_data %>% filter(Continent_Name == "South America")
+
+ggplot(q4_SA, aes(x= Country_Region, y = percentage, fill = Country_Region)) + geom_bar(stat= "identity")
+
+```
+
 
 ```
 # Question 5:
