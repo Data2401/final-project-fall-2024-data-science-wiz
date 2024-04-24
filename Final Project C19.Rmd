@@ -122,6 +122,7 @@ ggplot(top_10_avg_countries, aes(x = reorder(Country_Region, mean_cases), y = me
 
 
 ```
+
 # Question 2:
 ```{r}
 #top 5 countries with least cases 
@@ -164,6 +165,7 @@ ggplot(bottom_10_avg_countries, aes(x = reorder(Country_Region, mean_cases), y =
        y = "Average Cases") +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 ```
+
 # Question 3
 ```{r}
 #relationship between hospitalization and deaths from covid-19?
@@ -262,7 +264,6 @@ ggplot(q4_NA, aes(x= reorder(Country_Region, -percentage), y = percentage )) + g
        y = "Cases Percentage")
 
 ```
-
 
 ### question 4 part SA
 ```{r}

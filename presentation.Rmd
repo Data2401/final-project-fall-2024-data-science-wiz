@@ -81,7 +81,7 @@ Final_covid19_data <- Final_covid19_data %>% select(date, month, day, Continent_
 ```{r}
 glimpse(Final_covid19_data)
 ```
-## Answers 
+
 ## Top 10 countries with Most Cases
 ```{r}
 
