@@ -7,11 +7,12 @@ output:
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = FALSE)
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE)
 ```
 
 ## R INTRODUCTION
 
+  The data used was collected from ___ which shows data collected from Covid 19 cases for the first 6 months of 2020 from over 100 countries. We also used data from ___ to collect the population of each country in 2020.
   
 
 ## Questions
@@ -24,12 +25,24 @@ knitr::opts_chunk$set(echo = FALSE)
 
 ## Packages Used
 
-```{r}
+```{r, echo=FALSE, message=FALSE}
 library(tidyverse)
 library(ggplot2)
-
+library(lubridate) #this package was used to separate the dates into separate columns
+library(scales) #this package was used to label the axis with percent
 ```
+- library(tidyverse)
+- library(ggplot2)
+- library(lubridate) #this package was used to separate the dates into separate columns
+- library(scales) #this package was used to label the axis with percent
+
 ## Unfiltered Data 
+```{r, echo=FALSE} 
+#load in data
+covid19_data <- read.csv("covid19.csv")
+pop_data <- read.csv("population_by_country_2020.csv")
+```
+
 ```{r}
 
 glimpse(covid19_data)
@@ -37,6 +50,211 @@ glimpse(covid19_data)
 ```
 ## Data Key Terms
 
+## Missing Data 
+
+## Filtering the Data
+```{r, message=FALSE, echo=FALSE}
+#separating the date column into separate columns to filter better for each month
+colnames(covid19_data)[1] <- "date" 
+covid19_data$date <- as.Date(covid19_data$date)
+c19_dd <- data.frame(date = covid19_data$date,
+                              year = as.numeric(format(covid19_data$date, format = "%y")), 
+                              month = as.numeric(format(covid19_data$date, format = "%m")), 
+                              day = as.numeric(format(covid19_data$date, format = "%d")))
+
+#joined the original dataset with the newly created dataset with the separated columns
+new_covid19_data <- full_join(c19_dd, covid19_data, by = "date") 
+
+#filtering to keep 'all states' for each country 
+new_covid19_data <- new_covid19_data %>% filter(Province_State == "All States")
+
+#removes any duplicated rows
+Final_covid19_data <- new_covid19_data %>% distinct(month, day, Continent_Name,Country_Region, Province_State, positive, hospitalized, .keep_all = TRUE)
+
+#selecting specific columns
+Final_covid19_data <- Final_covid19_data %>% select(date, month, day, Continent_Name, Country_Region, positive, death, hospitalizedCurr )
+
+# this is to check to make sure the data was properly filtered
+#Final_covid19_data %>% filter(month == 2) %>% arrange(-positive) %>% head(10)
+```
+
+```{r}
+glimpse(Final_covid19_data)
+```
 ## Answers 
+## Top 10 countries with Most Cases
+```{r}
+
+#Final_covid19_data %>% group_by(Country_Region) %>% summarize_at(vars(positive), list(max = max), na.rm = T) %>% arrange(-max) %>% head(10)
+
+#Filtering data for the countries with the top 10 cases
+top_10_countries <- Final_covid19_data %>% 
+  group_by(Country_Region) %>% 
+  summarize(total_cases = max(positive, na.rm = TRUE)) %>% 
+  top_n(10, total_cases) %>% 
+  arrange(desc(total_cases))
+
+# Create the bar plot
+ggplot(top_10_countries, aes(x = reorder(Country_Region, total_cases), y = total_cases)) +
+  geom_bar(stat = "identity", fill = "skyblue") +
+  labs(title = "Top 10 Countries with Most COVID-19 Cases",
+       x = "Country",
+       y = "Total Cases") +
+  coord_flip()
+
+```
+
+## Top 10 countries with Most Cases on Average
+```{r}
+
+# Filter the data to get the top 10 countries with the highest average cases
+top_10_avg_countries <- Final_covid19_data %>%
+  group_by(Country_Region) %>%
+  summarize(mean_cases = mean(positive, na.rm = TRUE)) %>%
+  top_n(10, mean_cases) %>%
+  arrange(desc(mean_cases))
+
+# Create the bar plot
+ggplot(top_10_avg_countries, aes(x = reorder(Country_Region, mean_cases), y = mean_cases)) +
+  geom_bar(stat = "identity", fill ="lightpink") +
+  labs(title = "Top 10 Countries with Highest Average COVID-19 Cases",
+       x = "Country",
+       y = "Average Cases") +
+  coord_flip()
+
+```
+
+## Top 5 Countries with Least Cases
+```{r}
+
+```
+
+## Top 5 Countries with Least Cases on Average
+```{r}
+#Final_covid19_data %>% group_by(Country_Region) %>% summarize_at(vars(positive), list(mean = mean), na.rm = T) %>% arrange(mean) %>% head(10)
+
+bottom_10_avg_countries <- Final_covid19_data %>%
+  group_by(Country_Region) %>%
+  summarize(mean_cases = mean(positive, na.rm = TRUE)) %>%
+  top_n(10, -mean_cases) %>%
+  arrange(mean_cases)
+
+#graph
+ggplot(bottom_10_avg_countries, aes(x = reorder(Country_Region, mean_cases), y = mean_cases)) +
+  geom_point(color = "darkred") +
+  labs(title = "Top 10 Countries with Least Average COVID-19 Cases",
+       x = "Country",
+       y = "Average Cases") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
+
+## Relationship Bewtween Hospitalized Cases and Deaths
+```{r}
+
+```
+
+## Correlation between Population and Covid-19 Cases
+```{r}
+#Is there any correlation between the country population and covid-19 cases?
+
+new_pop <- pop_data %>% select(Country..or.dependency., Population..2020.)
+
+
+colnames(new_pop)[1] <- "Country_Region"
+colnames(new_pop)[2] <- "population"
+
+q4_data <- full_join(new_pop, Final_covid19_data, by = join_by(Country_Region))
+
+
+#filtering data
+q4_data <- q4_data %>% group_by(Continent_Name, Country_Region, population) %>% summarize_at(vars(positive), list(max = max), na.rm = T) %>% arrange(-max) %>% head(108)
+
+#renaming the column to 'cases' 
+colnames(q4_data)[4] <- "cases"
+
+#making a column with the percentage of covid cases to the population of the countries
+q4_data$percentage <- (q4_data$cases * 100) / q4_data$population
+
+
+#graphs 
+#graph 1 shows the percentage of cases throughout each country 
+
+ggplot(q4_data, aes(population, percentage, color = Continent_Name)) +geom_point(size = 2, alpha = 1/2) + scale_y_continuous(labels = percent)  + scale_x_log10()
+```
+
+## Correlation between Population and Covid-19 Cases
+```{r}
+#graph 2 divides it into continents
+ggplot(q4_data, aes(population, percentage, color = Continent_Name)) +geom_point(size = 2, alpha = 1/2) + scale_y_continuous(labels = percent) + facet_wrap(~ Continent_Name) + scale_x_log10()
+
+```
+
+## Correlation between Population and Covid-19 Cases
+### Africa
+```{r}
+
+q4_africa <- q4_data %>% filter(Continent_Name == "Africa") %>% arrange(-population) %>% head(10) 
+
+ggplot(q4_africa, aes(x= reorder(Country_Region, -percentage), y = percentage, fill = Country_Region)) + geom_bar(stat= "identity") + scale_y_continuous(labels = percent)
+
+```
+
+## Correlation between Population and Covid-19 Cases
+### Asia
+```{r}
+
+q4_Asia <- q4_data %>% filter(Continent_Name == "Asia") %>% head(10)
+
+q4_Asia <- q4_Asia %>% filter(Country_Region == "North Korea"  | Country_Region == "South Korea" | Country_Region == "Japan"| Country_Region == "India" | Country_Region == "Iran" | Country_Region == "Russia" | Country_Region == "Singapore" | Country_Region == "Vietnam" | Country_Region == "Lebanon" | Country_Region == "Thailand" ) %>% arrange( Country_Region)
+  
+
+ggplot(q4_Asia, aes(x= reorder(Country_Region, -percentage), y = percentage, fill = Country_Region)) + geom_bar(stat= "identity")+ scale_y_continuous(labels = percent)
+
+```
+
+## Correlation between Population and Covid-19 Cases
+### Europe
+```{r}
+
+q4_europe <- q4_data %>% filter(Continent_Name == "Europe") %>% head(10)
+
+ggplot(q4_europe, aes(x= reorder(Country_Region, -percentage), y = percentage, fill = Country_Region)) + geom_bar(stat= "identity")+ scale_y_continuous(labels = percent)
+
+```
+
+## Correlation between Population and Covid-19 Cases
+### North America
+```{r}
+
+q4_NA <- q4_data %>% filter(Continent_Name == "North America") %>% head(10)
+
+ggplot(q4_NA, aes(x= reorder(Country_Region, -percentage), y = percentage, fill = Country_Region)) + geom_bar(stat= "identity") + scale_y_continuous(labels = percent)
+
+```
+
+## Correlation between Population and Covid-19 Cases
+### South America
+```{r}
+
+q4_SA <- q4_data %>% filter(Continent_Name == "South America")
+
+ggplot(q4_SA, aes(x= reorder(Country_Region, -percentage), y = percentage, fill = Country_Region)) + geom_bar(stat= "identity") + scale_y_continuous(labels = percent)
+
+```
+
+## Peak Covid Cases
+```{r}
+# when was peak for most cases for most covid cases 
+most_cases_per_month <- Final_covid19_data %>% group_by(month, Continent_Name) %>% summarize_at(vars(positive), list(max = max), na.rm = T) %>% arrange(-max)
+
+#graph 
+ggplot(most_cases_per_month, aes(x = month, y = max, color = Continent_Name)) + geom_point(size = 3) 
+```
+
+## Peak Covid Cases
+```{r}
+# separated by continent
+ggplot(most_cases_per_month, aes(x = month, y = max, color = Continent_Name)) + geom_point(size = 3) + facet_wrap(~ Continent_Name)
+```
 
 ## Summary
