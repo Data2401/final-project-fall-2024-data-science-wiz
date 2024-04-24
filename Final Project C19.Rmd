@@ -223,25 +223,23 @@ q4_data$percentage <- (q4_data$cases * 100) / q4_data$population
 ggplot(q4_data, aes(population, percentage, color = Continent_Name)) +geom_point(size = 2, alpha = 1/2) + scale_y_continuous(labels = percent)  + scale_x_log10()
 
 #graph 2 divides it into continents
-ggplot(q4_data, aes(population, percentage, color = Continent_Name)) +geom_point(size = 2, alpha = 1/2) + scale_y_continuous(labels = percent) + facet_wrap(~ Continent_Name) + scale_x_log10()
+ggplot(q4_data, aes(population, percentage, color = Continent_Name)) +geom_point(size = 2) + scale_y_continuous(labels = percent) + facet_wrap(~ Continent_Name) + scale_x_log10() 
 
 ```
 ### question 4 part Africa
 ```{r}
-q4_africa <- q4_data %>% filter(Continent_Name == "Africa") %>% arrange(-population) %>% head(10) 
+q4_africa <- q4_data %>% filter(Continent_Name == "Africa") %>% arrange(-cases) %>% head(10) 
 
-ggplot(q4_africa, aes(x= Country_Region, y = percentage, fill = Country_Region)) + geom_bar(stat= "identity") + scale_y_continuous(labels = percent)
-
+ggplot(q4_africa, aes(x= reorder(Country_Region,-percentage), y = percentage)) + geom_bar(stat= "identity",show.legend = FALSE, fill = "#F8766D") + scale_y_continuous(labels = percent) +  labs(x = "Country",y = "Cases Percentage")
 ```
 
 ### question 4 part Asia
 ```{r}
-q4_Asia <- q4_data %>% filter(Continent_Name == "Asia")
+q4_Asia <- q4_data %>% filter(Continent_Name == "Asia") %>% head(10)
 
-q4_Asia <- q4_Asia %>% filter(Country_Region == "North Korea"  | Country_Region == "South Korea" | Country_Region == "Japan"| Country_Region == "India" | Country_Region == "Iran" | Country_Region == "Russia" | Country_Region == "Singapore" | Country_Region == "Vietnam" | Country_Region == "Lebanon" | Country_Region == "Thailand" ) %>% arrange( Country_Region)
-  
-
-ggplot(q4_Asia, aes(x= Country_Region, y = percentage, fill = Country_Region)) + geom_bar(stat= "identity")+ scale_y_continuous(labels = percent)
+ggplot(q4_Asia, aes(x= reorder(Country_Region, -percentage), y = percentage )) + geom_bar(stat= "identity",show.legend = FALSE, fill = "#B79F00")+ scale_y_continuous(labels = percent) +  labs(
+       x = "Country",
+       y = "Cases Percentage")
 
 ```
 
@@ -249,7 +247,9 @@ ggplot(q4_Asia, aes(x= Country_Region, y = percentage, fill = Country_Region)) +
 ```{r}
 q4_europe <- q4_data %>% filter(Continent_Name == "Europe") %>% head(10)
 
-ggplot(q4_europe, aes(x= Country_Region, y = percentage, fill = Country_Region)) + geom_bar(stat= "identity")+ scale_y_continuous(labels = percent)
+ggplot(q4_europe, aes(x= reorder(Country_Region, -percentage), y = percentage)) + geom_bar(stat= "identity",show.legend = FALSE, fill = "#00BA38") + scale_y_continuous(labels = percent) +  labs(
+       x = "Country",
+       y = "Cases Percentage")
 
 ```
 
@@ -257,7 +257,9 @@ ggplot(q4_europe, aes(x= Country_Region, y = percentage, fill = Country_Region))
 ```{r}
 q4_NA <- q4_data %>% filter(Continent_Name == "North America") %>% head(10)
 
-ggplot(q4_NA, aes(x= Country_Region, y = percentage, fill = Country_Region)) + geom_bar(stat= "identity") + scale_y_continuous(labels = percent)
+ggplot(q4_NA, aes(x= reorder(Country_Region, -percentage), y = percentage )) + geom_bar(stat= "identity",show.legend = FALSE, fill = "#00BFC4") + scale_y_continuous(labels = percent) +  labs(
+       x = "Country",
+       y = "Cases Percentage")
 
 ```
 
@@ -266,15 +268,17 @@ ggplot(q4_NA, aes(x= Country_Region, y = percentage, fill = Country_Region)) + g
 ```{r}
 q4_SA <- q4_data %>% filter(Continent_Name == "South America")
 
-ggplot(q4_SA, aes(x= Country_Region, y = percentage, fill = Country_Region)) + geom_bar(stat= "identity") + scale_y_continuous(labels = percent)
+ggplot(q4_SA, aes(x= reorder(Country_Region, -percentage), y = percentage)) + geom_bar(stat= "identity",show.legend = FALSE, fill = "#F564E3") + scale_y_continuous(labels = percent) +  labs(
+       x = "Country",
+       y = "Cases Percentage")
 
 ```
 
 
-```
+
 # Question 5:
 ```{r}
-#when was peak for most cases for most covid cases
+# when was peak for most cases for most covid cases 
 most_cases_per_month <- Final_covid19_data %>% group_by(month, Continent_Name) %>% summarize_at(vars(positive), list(max = max), na.rm = T) %>% arrange(-max)
 
 #graph 
@@ -284,6 +288,4 @@ ggplot(most_cases_per_month, aes(x = month, y = max, color = Continent_Name)) + 
 # separated by continent
 ggplot(most_cases_per_month, aes(x = month, y = max, color = Continent_Name)) + geom_point(size = 3) + facet_wrap(~ Continent_Name)
 ```
-
-
 
