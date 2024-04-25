@@ -238,7 +238,7 @@ ggplot(q4_data, aes(population, percentage, color = Continent_Name)) +geom_point
 ## Correlation between Population and Covid-19 Cases
 ```{r}
 #graph 2 divides it into continents
-ggplot(q4_data, aes(population, percentage, color = Continent_Name)) +geom_point(size = 2, alpha = 1/2) + scale_y_continuous(labels = percent) + facet_wrap(~ Continent_Name) + scale_x_log10() + labs(title = "Population Percentage affected by Covid-19")
+ggplot(q4_data, aes(population, percentage, color = Continent_Name)) +geom_point(size = 2, alpha = 1/2) + scale_y_continuous(labels = percent) + facet_wrap(~ Continent_Name) + scale_x_log10() + labs(title = "Population Percentage affected by Covid-19") + theme(axis.text.x = element_text(angle = 35, hjust = 1))
 
 ```
 
@@ -248,7 +248,7 @@ ggplot(q4_data, aes(population, percentage, color = Continent_Name)) +geom_point
 
 q4_africa <- q4_data %>% filter(Continent_Name == "Africa") %>% arrange(-population) %>% head(10)
 
-ggplot(q4_africa, aes(x= reorder(Country_Region, -percentage), y = percentage)) + geom_bar(stat= "identity",show.legend = FALSE, fill = "#F8766D") + scale_y_continuous(labels = percent) +  labs( title = "Population Percentage affected by Covid-19", x = "Country",y = "Cases Percentage")
+ggplot(q4_africa, aes(x= reorder(Country_Region, -percentage), y = percentage)) + geom_bar(stat= "identity",show.legend = FALSE, fill = "#F8766D") + scale_y_continuous(labels = percent) +  labs( title = "Population Percentage affected by Covid-19", x = "Country",y = "Cases Percentage") + theme(axis.text.x = element_text(angle = 35, hjust = 1))
 
 ```
 
@@ -260,7 +260,7 @@ q4_Asia <- q4_data %>% filter(Continent_Name == "Asia") %>% head(10)
 
 ggplot(q4_Asia, aes(x= reorder(Country_Region, -percentage), y = percentage, fill = Country_Region)) + geom_bar(stat= "identity",show.legend = FALSE, fill = "#B79F00")+ scale_y_continuous(labels = percent) +  labs( title = "Population Percentage affected by Covid-19",
        x = "Country",
-       y = "Cases Percentage")
+       y = "Cases Percentage") + theme(axis.text.x = element_text(angle = 35, hjust = 1))
 ```
 
 ## Correlation between Population and Covid-19 Cases
@@ -285,7 +285,7 @@ q4_NA <- q4_data %>% filter(Continent_Name == "North America") %>% head(10)
 
 ggplot(q4_NA, aes(x= reorder(Country_Region, -percentage), y = percentage, fill = Country_Region)) + geom_bar(stat= "identity",show.legend = FALSE, fill = "#00BFC4") + scale_y_continuous(labels = percent) +  labs(title = "Population Percentage affected by Covid-19",
        x = "Country",
-       y = "Cases Percentage")
+       y = "Cases Percentage") + theme(axis.text.x = element_text(angle = 35, hjust = 1))
 
 
 ```
