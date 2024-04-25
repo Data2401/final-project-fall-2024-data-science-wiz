@@ -62,9 +62,6 @@ glimpse(covid19_data)
 - **Hospitalization**: recorded number of poeple in a hospital due to covid
 - **Deaths**:Number of people who passed due to covid-19
 
-
-## Missing Data 
-
 ## Filtering the Data
 ```{r, message=FALSE, echo=FALSE}
 #separating the date column into separate columns to filter better for each month
@@ -194,6 +191,7 @@ ggplot(q3_data, aes(x = reorder(death_max, -hospitalizedCurr_max), y = hospitali
   theme(axis.text.x = element_text(angle = 35, hjust = 1))
 
 ```
+
 ## Relationship Between Hospitalized Cases and Deaths
 ```{r}
 
@@ -234,13 +232,13 @@ q4_data$percentage <- (q4_data$cases * 100) / q4_data$population
 #graphs 
 #graph 1 shows the percentage of cases throughout each country 
 
-ggplot(q4_data, aes(population, percentage, color = Continent_Name)) +geom_point(size = 2, alpha = 1/2) + scale_y_continuous(labels = percent)  + scale_x_log10()
+ggplot(q4_data, aes(population, percentage, color = Continent_Name)) +geom_point(size = 2, alpha = 1/2) + scale_y_continuous(labels = percent)  + scale_x_log10() + labs(title = "Population Percentage affected by Covid-19")
 ```
 
 ## Correlation between Population and Covid-19 Cases
 ```{r}
 #graph 2 divides it into continents
-ggplot(q4_data, aes(population, percentage, color = Continent_Name)) +geom_point(size = 2, alpha = 1/2) + scale_y_continuous(labels = percent) + facet_wrap(~ Continent_Name) + scale_x_log10()
+ggplot(q4_data, aes(population, percentage, color = Continent_Name)) +geom_point(size = 2, alpha = 1/2) + scale_y_continuous(labels = percent) + facet_wrap(~ Continent_Name) + scale_x_log10() + labs(title = "Population Percentage affected by Covid-19")
 
 ```
 
@@ -250,7 +248,7 @@ ggplot(q4_data, aes(population, percentage, color = Continent_Name)) +geom_point
 
 q4_africa <- q4_data %>% filter(Continent_Name == "Africa") %>% arrange(-population) %>% head(10)
 
-ggplot(q4_africa, aes(x= reorder(Country_Region, -percentage), y = percentage)) + geom_bar(stat= "identity",show.legend = FALSE, fill = "#F8766D") + scale_y_continuous(labels = percent) +  labs(x = "Country",y = "Cases Percentage")
+ggplot(q4_africa, aes(x= reorder(Country_Region, -percentage), y = percentage)) + geom_bar(stat= "identity",show.legend = FALSE, fill = "#F8766D") + scale_y_continuous(labels = percent) +  labs( title = "Population Percentage affected by Covid-19", x = "Country",y = "Cases Percentage")
 
 ```
 
@@ -260,7 +258,7 @@ ggplot(q4_africa, aes(x= reorder(Country_Region, -percentage), y = percentage)) 
 
 q4_Asia <- q4_data %>% filter(Continent_Name == "Asia") %>% head(10)
 
-ggplot(q4_Asia, aes(x= reorder(Country_Region, -percentage), y = percentage, fill = Country_Region)) + geom_bar(stat= "identity",show.legend = FALSE, fill = "#B79F00")+ scale_y_continuous(labels = percent) +  labs(
+ggplot(q4_Asia, aes(x= reorder(Country_Region, -percentage), y = percentage, fill = Country_Region)) + geom_bar(stat= "identity",show.legend = FALSE, fill = "#B79F00")+ scale_y_continuous(labels = percent) +  labs( title = "Population Percentage affected by Covid-19",
        x = "Country",
        y = "Cases Percentage")
 ```
@@ -271,7 +269,9 @@ ggplot(q4_Asia, aes(x= reorder(Country_Region, -percentage), y = percentage, fil
 
 q4_europe <- q4_data %>% filter(Continent_Name == "Europe") %>% head(10)
 
-ggplot(q4_europe, aes(x= reorder(Country_Region, -percentage), y = percentage, fill = Country_Region)) + geom_bar(stat= "identity",show.legend = FALSE, fill = "#00BA38") + scale_y_continuous(labels = percent) +  labs(
+q4_europe[3,2] <- "UK"
+
+ggplot(q4_europe, aes(x= reorder(Country_Region, -percentage), y = percentage, fill = Country_Region)) + geom_bar(stat= "identity",show.legend = FALSE, fill = "#00BA38") + scale_y_continuous(labels = percent) +  labs(title = "Population Percentage affected by Covid-19",
        x = "Country",
        y = "Cases Percentage")
 
@@ -283,7 +283,7 @@ ggplot(q4_europe, aes(x= reorder(Country_Region, -percentage), y = percentage, f
 
 q4_NA <- q4_data %>% filter(Continent_Name == "North America") %>% head(10)
 
-ggplot(q4_NA, aes(x= reorder(Country_Region, -percentage), y = percentage, fill = Country_Region)) + geom_bar(stat= "identity",show.legend = FALSE, fill = "#00BFC4") + scale_y_continuous(labels = percent) +  labs(
+ggplot(q4_NA, aes(x= reorder(Country_Region, -percentage), y = percentage, fill = Country_Region)) + geom_bar(stat= "identity",show.legend = FALSE, fill = "#00BFC4") + scale_y_continuous(labels = percent) +  labs(title = "Population Percentage affected by Covid-19",
        x = "Country",
        y = "Cases Percentage")
 
@@ -296,7 +296,7 @@ ggplot(q4_NA, aes(x= reorder(Country_Region, -percentage), y = percentage, fill 
 
 q4_SA <- q4_data %>% filter(Continent_Name == "South America")
 
-ggplot(q4_SA, aes(x= reorder(Country_Region, -percentage), y = percentage)) + geom_bar(stat= "identity",show.legend = FALSE, fill = "#F564E3") + scale_y_continuous(labels = percent) +  labs(
+ggplot(q4_SA, aes(x= reorder(Country_Region, -percentage), y = percentage)) + geom_bar(stat= "identity",show.legend = FALSE, fill = "#F564E3") + scale_y_continuous(labels = percent) +  labs( title = "Population Percentage affected by Covid-19",
        x = "Country",
        y = "Cases Percentage")
 
@@ -308,16 +308,17 @@ ggplot(q4_SA, aes(x= reorder(Country_Region, -percentage), y = percentage)) + ge
 most_cases_per_month <- Final_covid19_data %>% group_by(month, Continent_Name) %>% summarize_at(vars(positive), list(max = max), na.rm = T) %>% arrange(-max)
 
 #graph 
-ggplot(most_cases_per_month, aes(x = month, y = max, color = Continent_Name)) + geom_point(size = 3) 
+ggplot(most_cases_per_month, aes(x = month, y = max, color = Continent_Name)) + geom_point(size = 2, alpha = 1/2) + labs(title = "Peak Covid-19 Cases", x = "Month", y = "Cases")
 ```
 
 ## Peak Covid Cases
 ```{r}
 # separated by continent
-ggplot(most_cases_per_month, aes(x = month, y = max, color = Continent_Name)) + geom_point(size = 3) + facet_wrap(~ Continent_Name)
+ggplot(most_cases_per_month, aes(x = month, y = max, color = Continent_Name)) + geom_point(size = 2) + facet_wrap(~ Continent_Name) + labs(title = "Peak Covid-19 Cases Per Continent", x = "Month", y = "Cases")
 ```
 
 ## Summary
+
 To conclude, this data showed us in depth the amount of impact covid-19 had on humanity as a whole. Although this was only the first six months of Covid data recorded, the data set proved to be useful in discovering certain trends within all the entries taken. We have discovered a positive trend when it came to the population and positive Covid-19 cases. We can imagine that there were cultural factors taken into account, or certain preventative measures that countries took during the beginning of Covid. This topic has also opened up a plethora of further questions that can be taken from this data set.
 
 
