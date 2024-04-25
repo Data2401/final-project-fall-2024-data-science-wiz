@@ -195,6 +195,38 @@ ggplot(q3_data, aes(x = reorder(death_max, -hospitalizedCurr_max), y = hospitali
 
 ```
 
+```{r} 
+# second version just added
+#countries with hospitalized dat 
+x  <- Final_covid19_data %>% group_by(Country_Region) %>% summarise_at(vars(hospitalizedCurr), list(max = max), na.rm = TRUE) %>% arrange(-max) %>% head(10)
+
+#countries with death data
+ y <-Final_covid19_data %>% group_by(Country_Region) %>% summarise_at(vars(death), list(max = max), na.rm = TRUE) %>% arrange(-max) %>% head(10)
+ 
+ y[3,1] <- "UK"
+
+#mini dataset with death and hospitalized data
+q3_data <-Final_covid19_data %>% group_by(Country_Region, Continent_Name) %>% summarise_at(vars(hospitalizedCurr, death), list(max = max), na.rm = TRUE) %>% filter_if(is.numeric, all_vars((.)!= 0))
+
+#changing colname
+colnames(q3_data)[3] <- "Hospitalized_Cases"
+colnames(q3_data)[4] <- "Deaths"
+q3_data <- q3_data |> 
+   pivot_longer(cols = c(Hospitalized_Cases, Deaths), names_to = 'type', values_to = 'amount')
+
+
+
+#attempts at graphing
+#hosp vs death
+ggplot(q3_data, aes(x = reorder(Country_Region, -amount), y = amount, fill = type)) + geom_bar(stat = "identity", position = "dodge") + labs(title = "Hospitalized Cases vs Death from Covid-19", x= "Country", y = "")
+
+#top countries with most hosp
+ggplot(x, aes(x = reorder(Country_Region, -max), y = max)) + geom_bar(stat = "identity", fill = "lightgreen")+ labs(title = "Top 10 Countries with highest hospitalized rate", x = "Country", y = "")
+
+#top countries with most death
+ggplot(y, aes(x = reorder(Country_Region, -max), y = max)) + geom_bar(stat = "identity", fill = "pink") + labs(title = "Top 10 Countries with highest mortality rate", x = "Country", y = "")
+```
+
 
 # Question 4: 
 ```{r, message=FALSE}
@@ -228,6 +260,8 @@ ggplot(q4_data, aes(population, percentage, color = Continent_Name)) +geom_point
 ggplot(q4_data, aes(population, percentage, color = Continent_Name)) +geom_point(size = 2) + scale_y_continuous(labels = percent) + facet_wrap(~ Continent_Name) + scale_x_log10() 
 
 ```
+
+
 ### question 4 part Africa
 ```{r}
 q4_africa <- q4_data %>% filter(Continent_Name == "Africa") %>% arrange(-cases) %>% head(10) 
