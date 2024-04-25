@@ -283,6 +283,7 @@ ggplot(q4_Asia, aes(x= reorder(Country_Region, -percentage), y = percentage )) +
 ```{r}
 q4_europe <- q4_data %>% filter(Continent_Name == "Europe") %>% head(10)
 
+
 ggplot(q4_europe, aes(x= reorder(Country_Region, -percentage), y = percentage)) + geom_bar(stat= "identity",show.legend = FALSE, fill = "#00BA38") + scale_y_continuous(labels = percent) +  labs(
        x = "Country",
        y = "Cases Percentage")
