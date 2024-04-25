@@ -12,8 +12,12 @@ knitr::opts_chunk$set(echo = FALSE, warning = FALSE)
 
 ## Introduction
 
-  The data used was collected from ___ which shows data collected from Covid 19 cases for the first 6 months of 2020 from over 100 countries. We also used data from ___ to collect the population of each country in 2020.
+  The data set used was sourced from DataQuest which provided us with data collected from Covid 19 cases, documented from the first 6 months of 2020 from over 100 countries. We also used data from Kaggle to collect the population of each country in 2020.
   
+ [This is the link to DataQuest.](https://www.dataquest.io/)
+ 
+ 
+ [This is the link to Kaggle.](https://www.kaggle.com/datasets/tanuprabhu/population-by-country-2020)
 
 ## Questions
 
@@ -49,6 +53,15 @@ glimpse(covid19_data)
 
 ```
 ## Data Key Terms
+- **Country**: Country of origin
+- **Continent**: Continent where data was documented
+- **Population**: NNumber of people in said country
+- **Month**: Month the data was collected
+- **Day**:Day the dat was collected
+- **Positive**: Postive covid-19 cases recorded
+- **Hospitalization**: recorded number of poeple in a hospital due to covid
+- **Deaths**:Number of people who passed due to covid-19
+
 
 ## Missing Data 
 
@@ -148,7 +161,7 @@ ggplot(bottom_10_avg_countries, aes(x = reorder(Country_Region, mean_cases), y =
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 ```
 
-## Relationship Bewtween Hospitalized Cases and Deaths
+## Relationship Between Hospitalized Cases and Deaths
 ```{r}
 
 ```
