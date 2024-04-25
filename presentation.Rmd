@@ -276,6 +276,6 @@ ggplot(most_cases_per_month, aes(x = month, y = max, color = Continent_Name)) + 
 ```
 
 ## Summary
-
+To conclude, this data showed us in depth the amount of impact covid-19 had on humanity as a whole. Although this was only the first six months of Covid data recorded, the data set proved to be useful in discovering certain trends within all the entries taken. We have discovered a positive trend when it came to the population and positive Covid-19 cases. We can imagine that there were cultural factors taken into account, or certain preventative measures that countries took during the beginning of Covid. This topic has also opened up a plethora of further questions that can be taken from this data set.
 
 
