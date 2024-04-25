@@ -279,14 +279,14 @@ ggplot(q4_SA, aes(x= reorder(Country_Region, -percentage), y = percentage)) + ge
 
 # Question 5:
 ```{r}
-# when was peak for most cases for most covid cases 
-most_cases_per_month <- Final_covid19_data %>% group_by(month, Continent_Name) %>% summarize_at(vars(positive), list(max = max), na.rm = T) %>% arrange(-max)
+#when was peak for most cases for most covid cases
+most_cases_per_month <- Final_covid19_data %>% group_by(month, Continent_Name) %>% summarize_at(vars(positive), list(sum = sum), na.rm = T) %>% arrange(-sum)
 
-#graph 
-ggplot(most_cases_per_month, aes(x = month, y = max, color = Continent_Name)) + geom_point(size = 3) 
+ggplot(most_cases_per_month, aes(x = month, y = sum, color = Continent_Name)) + geom_point(size = 2) + scale_x_log10()
 
 
-# separated by continent
-ggplot(most_cases_per_month, aes(x = month, y = max, color = Continent_Name)) + geom_point(size = 3) + facet_wrap(~ Continent_Name)
+
+ggplot(most_cases_per_month, aes(x = month, y = sum, color = Continent_Name)) + geom_point(size = 2) + facet_wrap(~ Continent_Name) +scale_x_log10()
+
 ```
 
