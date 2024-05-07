@@ -151,6 +151,7 @@ ggplot(q3_data, aes(x = Country_Region, y = hospitalizedCurr_max, color = deaths
   theme(axis.text.x = element_text(angle = 35, hjust = 1))
 
 ```
+
 In this graph we can see how Italy not only had the highest hospitalized cases, but also the highest amount of deaths in comparison to the rest of the countries. 
 
 ```{r, message=FALSE, echo=FALSE} 
@@ -181,22 +182,34 @@ However, the graph above visually lacks to show a direct comparison to the death
 ggplot(q3_data, aes(x = reorder(Country_Region, -amount), y = amount, fill = type)) + geom_bar(stat = "identity", position = "dodge") + labs(title = "Hospitalized Cases vs Death from Covid-19", x= "Country", y = "")  +  theme(axis.text.x = element_text(angle = 35, hjust = 1))
 ```
 
-In this second graph it was much easier to fully visually compare both the amount of deaths and hospitalized cases for each country by providing graphs side by side. There seems to be an issue with Costa Rica as its numbers are not showing up on the graph. 
+In this second graph it was much easier to fully visually compare both the amount of deaths and hospitalized cases for each country by providing graphs side by side. We can now see how Singapore had a relatively high number of hospitalized cases and yet no deaths. Additionally it seems that Italy and New Zealand were the only two countries with a number similarity in their deaths and hospitalized cases. Whereas the rest of the countries shown had a difference between them where there seem to be a low death count.
+
+We noticed how previously the United States was listed as the country with the highest amount of covid cases, yet the United states had no hospitalized cases in the data. Therefore we wanted to explore the hospitalized cases and deaths individually to see if there were any other countries with "missing" data as well.  
 
 ```{r, message=FALSE, echo=FALSE}
+
+print(x)
+
 #top countries with most hosp
-ggplot(x, aes(x = reorder(Country_Region, -max), y = max)) + geom_bar(stat = "identity", fill = "lightgreen")+ labs(title = "Top 10 Countries with highest hospitalized rate", x = "Country", y = "")  + theme(axis.text.x = element_text(angle = 35, hjust = 1))
+ggplot(x, aes(x = reorder(Country_Region, -max), y = max)) + geom_bar(stat = "identity", fill = "lightgreen")+ labs(title = "Top 10 Countries with Highest Hospitalized Cases", x = "Country", y = "")  + theme(axis.text.x = element_text(angle = 35, hjust = 1))
 ```
+
+With the tibble of the Top 10 countries with the highest Hospitalized Cases, we can clearly see that Costa rica did have hospitalized cases. The reason it can been seen clearly on the graph is due to the low number in comparison to the other countries. A new Country seems to have appeared in this graph, Iceland also had some recorded hospitalized cases, meaning they did not have any deaths according to the data set. 
+
+Now lets take a look at countries with recorded deaths. 
 
 ```{r, message=FALSE, echo=FALSE}
 #top countries with most death
-ggplot(y, aes(x = reorder(Country_Region, -max), y = max)) + geom_bar(stat = "identity", fill = "pink") + labs(title = "Top 10 Countries with highest mortality rate", x = "Country", y = "")  + theme(axis.text.x = element_text(angle = 35, hjust = 1))
+ggplot(y, aes(x = reorder(Country_Region, -max), y = max)) + geom_bar(stat = "identity", fill = "pink") + labs(title = "Top 10 Countries with highest Deaths", x = "Country", y = "")  + theme(axis.text.x = element_text(angle = 35, hjust = 1))
 ```
 
+Here we see how many more countries do in fact have the number of deaths in the data set. The United states once again at the highest with nearly 100,000 deaths from covid. 
 
 ## Correlation between the country population and covid-19 cases?
 
-```{r, message=FALSE, echo=FALSE}
+In order to find the correlation between population and covid-19 cases, we had to add another data set whoch gave us the 2020 population for each country. We joined the data sets and once again filtered the data we wanted to keep and placed it all into a variable for this question alone. We found it easier to show the percentage of how much of the population was affected in each country. 
+
+```{r, message=FALSE, echo=FALSE, warning=FALSE}
 #Is there any correlation between the country population and covid-19 cases?
 
 new_pop <- pop_data %>% select(Country..or.dependency., Population..2020.)
@@ -217,64 +230,69 @@ colnames(q4_data)[4] <- "cases"
 #making a column with the percentage of covid cases to the population of the countries
 q4_data$percentage <- (q4_data$cases * 100) / q4_data$population
 
-
 #graphs 
 #graph 1 shows the percentage of cases throughout each country 
 
-ggplot(q4_data, aes(population, percentage, color = Continent_Name)) +geom_point(size = 2, alpha = 1/2) + scale_y_continuous(labels = percent)  + scale_x_log10()  +  theme(axis.text.x = element_text(angle = 35, hjust = 1))
+ggplot(q4_data, aes(population, percentage, color = Continent_Name)) +geom_point(size = 1, alpha= 3/4) + scale_y_continuous(labels = percent)  + scale_x_log10()  + labs(title = "Population Percentage affected by Covid-19")
+```
 
+In this first graph, we have a very messy scatter plot showing all the countries and how much of their population was affected. Its important to note how the majority of African countries seem to be at the bottom. European countries seem to be the ones with the most variation amongst each other. It is still a bit difficult to differentiate them, so we decided to facet wrap the graph by continet. 
+
+```{r, message=FALSE, echo=FALSE, warning=FALSE}
 #graph 2 divides it into continents
-ggplot(q4_data, aes(population, percentage, color = Continent_Name)) +geom_point(size = 2) + scale_y_continuous(labels = percent) + facet_wrap(~ Continent_Name) + scale_x_log10()  + theme(axis.text.x = element_text(angle = 35, hjust = 1))
+ggplot(q4_data, aes(population, percentage, color = Continent_Name)) +geom_point(size = 1) + scale_y_continuous(labels = percent) + facet_wrap(~ Continent_Name) + scale_x_log10()  + theme(axis.text.x = element_text(angle = 35, hjust = 1)) + labs(title = "Population Percentage affected by Covid-19")
 
 ```
 
+In this second graph, we can already visually distinguishg the continents thanks to the facet wrap. Interestingly, the African Countries are still overlapping one another. We were curious to see which countries were which, so we decided to create a graph for each one. We did not include Oceania as it only includes Australia and New Zealand. 
 
-### question 4 part Africa
-```{r}
+
+#### Africa
+```{r, message=FALSE, echo=FALSE, warning=FALSE}
 q4_africa <- q4_data %>% filter(Continent_Name == "Africa") %>% arrange(-cases) %>% head(10) 
 
-ggplot(q4_africa, aes(x= reorder(Country_Region,-percentage), y = percentage)) + geom_bar(stat= "identity",show.legend = FALSE, fill = "#F8766D") + scale_y_continuous(labels = percent) +  labs(x = "Country",y = "Cases Percentage")  + theme(axis.text.x = element_text(angle = 35, hjust = 1))
+ggplot(q4_africa, aes(x= reorder(Country_Region,-percentage), y = percentage)) + geom_bar(stat= "identity",show.legend = FALSE, fill = "#F8766D") + scale_y_continuous(labels = percent) +  labs(title = "Population Percentage affected by Covid-19",x = "Country",y = "Cases Percentage")  + theme(axis.text.x = element_text(angle = 35, hjust = 1))
 ```
 
-### question 4 part Asia
-```{r}
+#### Asia
+```{r, message=FALSE, echo=FALSE, warning=FALSE}
 q4_Asia <- q4_data %>% filter(Continent_Name == "Asia") %>% head(10)
 
-ggplot(q4_Asia, aes(x= reorder(Country_Region, -percentage), y = percentage )) + geom_bar(stat= "identity",show.legend = FALSE, fill = "#B79F00")+ scale_y_continuous(labels = percent) +  labs(
+ggplot(q4_Asia, aes(x= reorder(Country_Region, -percentage), y = percentage )) + geom_bar(stat= "identity",show.legend = FALSE, fill = "#B79F00")+ scale_y_continuous(labels = percent) +  labs( title = "Population Percentage affected by Covid-19",
        x = "Country",
        y = "Cases Percentage")  +
   theme(axis.text.x = element_text(angle = 35, hjust = 1))
 
 ```
 
-### question 4 part Europe
-```{r}
+#### Europe
+```{r, message=FALSE, echo=FALSE, warning=FALSE}
 q4_europe <- q4_data %>% filter(Continent_Name == "Europe") %>% head(10)
 
 
-ggplot(q4_europe, aes(x= reorder(Country_Region, -percentage), y = percentage)) + geom_bar(stat= "identity",show.legend = FALSE, fill = "#00BA38") + scale_y_continuous(labels = percent) +  labs(
+ggplot(q4_europe, aes(x= reorder(Country_Region, -percentage), y = percentage)) + geom_bar(stat= "identity",show.legend = FALSE, fill = "#00BA38") + scale_y_continuous(labels = percent) +  labs( title = "Population Percentage affected by Covid-19",
        x = "Country",
        y = "Cases Percentage")  +
   theme(axis.text.x = element_text(angle = 35, hjust = 1))
 
 ```
 
-### question 4 part NA
-```{r}
+#### North America
+```{r, message=FALSE, echo=FALSE, warning=FALSE}
 q4_NA <- q4_data %>% filter(Continent_Name == "North America") %>% head(10)
 
-ggplot(q4_NA, aes(x= reorder(Country_Region, -percentage), y = percentage )) + geom_bar(stat= "identity",show.legend = FALSE, fill = "#00BFC4") + scale_y_continuous(labels = percent) +  labs(
+ggplot(q4_NA, aes(x= reorder(Country_Region, -percentage), y = percentage )) + geom_bar(stat= "identity",show.legend = FALSE, fill = "#00BFC4") + scale_y_continuous(labels = percent) +  labs( title = "Population Percentage affected by Covid-19",
        x = "Country",
        y = "Cases Percentage")  +
   theme(axis.text.x = element_text(angle = 35, hjust = 1))
 
 ```
 
-### question 4 part SA
-```{r}
+#### South America
+```{r, message=FALSE, echo=FALSE, warning=FALSE}
 q4_SA <- q4_data %>% filter(Continent_Name == "South America")
 
-ggplot(q4_SA, aes(x= reorder(Country_Region, -percentage), y = percentage)) + geom_bar(stat= "identity",show.legend = FALSE, fill = "#F564E3") + scale_y_continuous(labels = percent) +  labs(
+ggplot(q4_SA, aes(x= reorder(Country_Region, -percentage), y = percentage)) + geom_bar(stat= "identity",show.legend = FALSE, fill = "#F564E3") + scale_y_continuous(labels = percent) +  labs( title = "Population Percentage affected by Covid-19",
        x = "Country",
        y = "Cases Percentage")  + theme(axis.text.x = element_text(angle = 35, hjust = 1))
 
@@ -282,8 +300,9 @@ ggplot(q4_SA, aes(x= reorder(Country_Region, -percentage), y = percentage)) + ge
 
 
 
-# Question 5:
-```{r}
+## When was **peak** for Most Covid-19 Cases in Each Country?: 
+
+```{r, message=FALSE, echo=FALSE, warning=FALSE}
 #when was peak for most cases for most covid cases
 most_cases_per_month <- Final_covid19_data %>% group_by(month, Continent_Name) %>% summarize_at(vars(positive), list(sum = sum), na.rm = T) %>% arrange(-sum)
 
