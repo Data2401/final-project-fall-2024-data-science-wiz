@@ -1,46 +1,61 @@
 ---
-title: "Final Project"
+title: "Early Global Covid-19 Report "
 author: "Claudia Lopez & Vanessa Ortiz"
-date: "2024-04-20"
-output: html_document
+date: "2024-05-07"
+output: 
+  html_document: 
+    theme: journal
+    highlight: tango
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-```{r, message=FALSE}
-library(tidyverse)
-library(ggplot2) 
-library(lubridate) #this package was used to separate the dates into separate columns
-library(scales) #this package was used to label the axis with percent
-```
-
 # Introduction 
 
-As an evolving planet and ever-evolving society, one thing has left a mark on the world . Covid-19 caused detrimental effects reaching all sides of the globe.  In this data set, we take a dive into the relationship of covid- 19 and the negative toll that it took upon human health that is measured through deaths. We will visually showcase the pattern between the data sets, All while asking questions such as the correlation of covid-19 and how they varied throughout each continent.  Through these data sets we will have a greater understanding of the once critical problem that took the lives of many. 
+[This is the link to DataQuest.](https://www.dataquest.io/)
+ 
+[This is the link to Kaggle.](https://www.kaggle.com/datasets/tanuprabhu/population-by-country-2020)
+
+As an evolving planet and ever-evolving society, one thing has left a mark on the world . Covid-19 caused detrimental effects reaching all sides of the globe.  In this data set, we take a dive into the relationship of Covid-19 and the negative toll that it took upon human health that is measured through deaths. We will visually showcase the pattern between the data sets, All while asking questions such as the correlation of Covid-19 and how they varied throughout each continent.  Through these data sets we will have a greater understanding of the once critical problem that took the lives of many. 
  
 
 # Questions
 
-- What are the top 10 countries with the most covid-19 cases?
-- What are the top 5 countries with the least covid-19 cases?
-- What is the relationship between hospitalization and deaths from covid-19?
-- Is there any correlation between the country population and covid-19 cases?
-- When was the peak of the most cases for covid?  
+- What are the Top 10 countries with the **Most** Covid-19 cases? 
+-- both the sum of cases and on average. 
+- What are the Top 5 countries with the **Least** Covid-19 cases?
+- What is the relationship between hospitalization and deaths from Covid-19?
+- Is there any correlation between the country population and Covid-19 cases?
+- When was the peak of the most cases for Covid?  
+
+# Setting up 
+
+First lets load in the packages used. 
+
+```{r, message=FALSE}
+
+library(tidyverse) #main package used in order to manipulate data. 
+library(ggplot2) #package used for graphing. 
+library(lubridate) #this package was used to separate the dates into separate columns
+library(scales) #this package was used to label the axis with percent
+```
+
+Next lets read the data sets we decided to use and create new variable names for them, as well as take a look at the unfiltered data. 
 
 ```{r} 
-#load in data
 covid19_data <- read.csv("covid19.csv")
 pop_data <- read.csv("population_by_country_2020.csv")
 
-
-
+glimpse(covid19_data)
+glimpse(pop_data)
 ```
 
+# Filtering the data 
 
-## Filtering the data 
-```{r, message=FALSE}
+  After viewing the information in these data sets, we decided to filter out any data we did not want to use. Notice how the date column in the 'covid19_data' has the year, month , and day combined. We realized it made it more difficult to filter out the information, therefore we created separate columns.
+```{r, warning= FALSE, echo=FALSE}
 #separating the date column into separate columns to filter better for each month
 colnames(covid19_data)[1] <- "date" 
 covid19_data$date <- as.Date(covid19_data$date)
@@ -49,7 +64,7 @@ c19_dd <- data.frame(date = covid19_data$date,
                               month = as.numeric(format(covid19_data$date, format = "%m")), 
                               day = as.numeric(format(covid19_data$date, format = "%d")))
 
-#joined the original dataset with the newly created dataset with the separated columns
+#joined the original data set with the newly created dataset with the separated columns
 new_covid19_data <- full_join(c19_dd, covid19_data, by = "date") 
 
 #filtering to keep 'all states' for each country 
@@ -58,142 +73,89 @@ new_covid19_data <- new_covid19_data %>% filter(Province_State == "All States")
 #removes any duplicated rows
 Final_covid19_data <- new_covid19_data %>% distinct(month, day, Continent_Name,Country_Region, Province_State, positive, hospitalized, .keep_all = TRUE)
 
-# this is to check to make sure the data was properly filtered
-Final_covid19_data %>% filter(month == 2) %>% arrange(-positive) %>% head(10)
-```
-#unnecessary and can be removed for final project
-```{r}
-#this section im trying to filter out the US Data 
-new_covid19_data %>% filter(month == "2") %>% arrange(-positive) %>% select(month, Country_Region, positive)  %>% head(10)
-
-US_data <- new_covid19_data %>% filter(Country_Region == "United States", Province_State == "All States")
-
-US_data %>% arrange(-positive) %>% head(5)
-
-#shows how many duplicated rows of each, in the knit file it prints out too long so i have marked it out for now
-#US_data[!duplicated(US_data$day), ] 
-
-
-US_data <- US_data %>% distinct(month,day, .keep_all = TRUE)
-#this eliminates the duplicated rows based on month and day, as in it keeps one entry per day
-
+#selecting specific columns
+Final_covid19_data <- Final_covid19_data %>% select(date, month, day, Continent_Name, Country_Region, positive, death, hospitalizedCurr )
 
 ```
-# Question 1:
+
 ```{r}
-#top 10 countries with most cases
+glimpse(Final_covid19_data)
+```
+# Data Analysis
 
+## Top 10 Countries with Most Cases:
 
-Final_covid19_data %>% group_by(Country_Region) %>% summarize_at(vars(positive), list(max = max), na.rm = T) %>% arrange(-max) %>% head(10)
-
+Thankfully the Covid 19 data set not only provided for a column with daily positive cases in each country but also a column for the total number of covid cases daily. Therefore in order to find the countries with the most cases, we filtered the countries with the hightest number of cases. 
+```{r, echo=FALSE}
 #Filtering data for the countries with the top 10 cases
-top_10_countries <- Final_covid19_data %>% 
-  group_by(Country_Region) %>% 
-  summarize(total_cases = max(positive, na.rm = TRUE)) %>% 
-  top_n(10, total_cases) %>% 
-  arrange(desc(total_cases))
+top_10_countries <- Final_covid19_data %>% group_by(Country_Region) %>% summarize_at(vars(positive), list(Cases = max), na.rm = T) %>% arrange(-Cases) %>% head(10)
+
+print(top_10_countries)
 
 # Create the bar plot
-ggplot(top_10_countries, aes(x = reorder(Country_Region, total_cases), y = total_cases)) +
+ggplot(top_10_countries, aes(x = reorder(Country_Region, Cases), y = Cases)) +
   geom_bar(stat = "identity", fill = "skyblue") +
   labs(title = "Top 10 Countries with Most COVID-19 Cases",
        x = "Country",
        y = "Total Cases") +
   coord_flip()
-
-#top 10 countries with most cases on average
-
-Final_covid19_data %>% group_by(Country_Region) %>% summarize_at(vars(positive), list(mean = mean), na.rm = T) %>% arrange(-mean) %>% head(10)
-
-# Filter the data to get the top 10 countries with the highest average cases
-top_10_avg_countries <- Final_covid19_data %>%
-  group_by(Country_Region) %>%
-  summarize(mean_cases = mean(positive, na.rm = TRUE)) %>%
-  top_n(10, mean_cases) %>%
-  arrange(desc(mean_cases))
-
-# Create the bar plot
-ggplot(top_10_avg_countries, aes(x = reorder(Country_Region, mean_cases), y = mean_cases)) +
-  geom_bar(stat = "identity", fill ="lightpink") +
-  labs(title = "Top 10 Countries with Highest Average COVID-19 Cases",
-       x = "Country",
-       y = "Average Cases") +
-  coord_flip()
-
-
 ```
 
-# Question 2:
-```{r}
-#top 5 countries with least cases 
+After filtering, we can clearly see the United States has the highest amount of cases with Russia and Italy following behind by over 1 million cases. 
 
-Final_covid19_data %>% group_by(Country_Region) %>% summarize_at(vars(positive), list(max = max), na.rm = T) %>% arrange(max) %>% head(5)
+## Top 10 countries with least cases:
 
-#Filtering data
-top_5_least_countries <- Final_covid19_data %>%
-  group_by(Country_Region) %>%
-  summarize(total_cases = max(positive, na.rm = TRUE)) %>%
-  arrange(total_cases) %>%
-  head(5)
+For this next question we used the same method as the previous question to find the countries with the least cases. 
+```{r, echo=FALSE}
+
+top_10_least_countries <- Final_covid19_data %>% group_by(Country_Region) %>% summarize_at(vars(positive), list(cases = max), na.rm = T) %>% arrange(cases) %>% head(10)
+
+print(top_10_least_countries)
 
 # Create the scatter plot
-ggplot(top_5_least_countries, aes(x = Country_Region, y = total_cases, color = Country_Region)) +
-  geom_point() +
-  labs(title = "Top 5 Countries with Least COVID-19 Cases",
+ggplot(top_10_least_countries, aes(x = Country_Region, y = cases, color = Country_Region)) +
+  geom_point(color = "violet") +
+  labs(title = "Top 10 Countries with Least COVID-19 Cases",
        x = "Country",
        y = "Total Cases") +
-  theme_minimal()
-
-#top 10 countries with the least cases on average
-Final_covid19_data %>% group_by(Country_Region) %>% summarize_at(vars(positive), list(mean = mean), na.rm = T) %>% arrange(mean) %>% head(10)
-
-bottom_10_avg_countries <- Final_covid19_data %>%
-  group_by(Country_Region) %>%
-  summarize(mean_cases = mean(positive, na.rm = TRUE)) %>%
-  top_n(10, -mean_cases) %>%
-  arrange(mean_cases)
-
-# Create the line plot
-ggplot(bottom_10_avg_countries, aes(x = reorder(Country_Region, mean_cases), y = mean_cases)) +
-  geom_point(color = "darkred") +
-  labs(title = "Top 10 Countries with Least Average COVID-19 Cases",
-       x = "Country",
-       y = "Average Cases") +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 ```
 
-# Question 3
-```{r}
+From here we can say that Ethiopia, Mauritius, and North Korea did not suffer from covid- 19 as there were no recorded cases according to the data. Seeing this data opened to more question that unfortunately could not be answered with this data set alone such as; 
+- Was there anything these countries specifically did to limit their population from being affected by covid? 
+
+## What is the relationship between hospitalization and deaths from Covid-19?
+
+For this next question, we created a separate data set to isolate the hospitalization and death columns. At this point in our analysis we realized there were some ilogical errors within the data. It is unknown whether the countries with 0 hospitalizations and deaths were actually zero, or not found information written as zero by the creator of the data set. Regardless we did our best to show the comparison. 
+
+```{r, echo=FALSE, message=FALSE}
 #relationship between hospitalization and deaths from covid-19?
 
 #countries with hospitalized data 
-Final_covid19_data %>% group_by(Country_Region) %>% summarise_at(vars(hospitalizedCurr), list(max = max), na.rm = TRUE) %>% arrange(-max) %>% head(10)
+h_data <-Final_covid19_data %>% group_by(Country_Region) %>% summarise_at(vars(hospitalizedCurr), list(max = max), na.rm = TRUE) %>% arrange(-max) %>% head(10)
 
 #countries with death data
-Final_covid19_data %>% group_by(Country_Region) %>% summarise_at(vars(death), list(max = max), na.rm = TRUE) %>% arrange(-max)
+d_data <-Final_covid19_data %>% group_by(Country_Region) %>% summarise_at(vars(death), list(max = max), na.rm = TRUE) %>% arrange(-max)
 
 #mini dataset with death and hospitalized data
 q3_data <-Final_covid19_data %>% group_by(Country_Region, Continent_Name) %>% summarise_at(vars(hospitalizedCurr, death), list(max = max), na.rm = TRUE) %>% filter_if(is.numeric, all_vars((.)!= 0))
-q3_data
 
-glimpse(q3_data)
+colnames(q3_data)[4] <- "deaths"
 
-#attempts at graphing 
-
-
-ggplot(q3_data, aes(x = reorder(death_max, -hospitalizedCurr_max), y = hospitalizedCurr_max, fill = Country_Region)) +
-  geom_col() +
-  labs(title = "Realtionship between hospitalization and deaths",
+ggplot(q3_data, aes(x = Country_Region, y = hospitalizedCurr_max, color = deaths)) +
+   geom_point() +
+  labs(title = "Relationship between hospitalization and deaths",
        x = "Deaths",
        y = "Hospitalized Cases",
        fill = "Country") +
   theme(axis.text.x = element_text(angle = 35, hjust = 1))
 
 ```
+In this graph we can see how Italy not only had the highest hospitalized cases, but also the highest amount of deaths in comparison to the rest of the countries. 
 
-```{r} 
+```{r, message=FALSE, echo=FALSE} 
 # second version just added
-#countries with hospitalized dat 
+#countries with hospitalized data 
 x  <- Final_covid19_data %>% group_by(Country_Region) %>% summarise_at(vars(hospitalizedCurr), list(max = max), na.rm = TRUE) %>% arrange(-max) %>% head(10)
 
 #countries with death data
@@ -204,28 +166,37 @@ x  <- Final_covid19_data %>% group_by(Country_Region) %>% summarise_at(vars(hosp
 #mini dataset with death and hospitalized data
 q3_data <-Final_covid19_data %>% group_by(Country_Region, Continent_Name) %>% summarise_at(vars(hospitalizedCurr, death), list(max = max), na.rm = TRUE) %>% filter_if(is.numeric, all_vars((.)!= 0))
 
-#changing colname
+#changing column name
 colnames(q3_data)[3] <- "Hospitalized_Cases"
 colnames(q3_data)[4] <- "Deaths"
 q3_data <- q3_data |> 
    pivot_longer(cols = c(Hospitalized_Cases, Deaths), names_to = 'type', values_to = 'amount')
-
-
-
+```
+ 
+However, the graph above visually lacks to show a direct comparison to the deaths and hospitalized other than the variation in color. 
+ 
+```{r, message=FALSE, echo=FALSE}
 #attempts at graphing
 #hosp vs death
 ggplot(q3_data, aes(x = reorder(Country_Region, -amount), y = amount, fill = type)) + geom_bar(stat = "identity", position = "dodge") + labs(title = "Hospitalized Cases vs Death from Covid-19", x= "Country", y = "")  +  theme(axis.text.x = element_text(angle = 35, hjust = 1))
+```
 
+In this second graph it was much easier to fully visually compare both the amount of deaths and hospitalized cases for each country by providing graphs side by side. There seems to be an issue with Costa Rica as its numbers are not showing up on the graph. 
+
+```{r, message=FALSE, echo=FALSE}
 #top countries with most hosp
 ggplot(x, aes(x = reorder(Country_Region, -max), y = max)) + geom_bar(stat = "identity", fill = "lightgreen")+ labs(title = "Top 10 Countries with highest hospitalized rate", x = "Country", y = "")  + theme(axis.text.x = element_text(angle = 35, hjust = 1))
+```
 
+```{r, message=FALSE, echo=FALSE}
 #top countries with most death
 ggplot(y, aes(x = reorder(Country_Region, -max), y = max)) + geom_bar(stat = "identity", fill = "pink") + labs(title = "Top 10 Countries with highest mortality rate", x = "Country", y = "")  + theme(axis.text.x = element_text(angle = 35, hjust = 1))
 ```
 
 
-# Question 4: 
-```{r, message=FALSE}
+## Correlation between the country population and covid-19 cases?
+
+```{r, message=FALSE, echo=FALSE}
 #Is there any correlation between the country population and covid-19 cases?
 
 new_pop <- pop_data %>% select(Country..or.dependency., Population..2020.)
